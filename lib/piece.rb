@@ -2,6 +2,11 @@
 
 # the pieces in the game
 class Piece
+  class << self
+    attr_accessor :all
+  end
+
+  @all = []
 
   attr_reader :type, :color, :start_pos
   attr_accessor :current_pos
@@ -11,6 +16,13 @@ class Piece
     @color = color
     @start_pos = start_pos
     @current_pos = start_pos
+    settle_in
+    Piece.all << self
+  end
+
+  def settle_in
+    square = Board.squares.select { |s| s.position == current_pos }[0]
+    square.occupied_by = self
   end
 
   WHITE = { rook: [:a1, :h1], knight: [:b1, :g1], bishop: [:c1, :f1], queen: :d1,

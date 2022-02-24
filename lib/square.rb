@@ -2,13 +2,16 @@
 
 # an individual square on the board (the nodes)
 class Square
-  attr_reader :position, :color, :occupied
+  attr_reader :position, :color
+  attr_accessor :occupied_by
 
   def initialize(position, color)
     @position = position
     @color = color
-    @occupied = false
+    @occupied_by = nil
   end
 
-  def occupied?; end
+  def occupied?
+    Piece.all.collect(&:current_pos).include?(position)
+  end
 end

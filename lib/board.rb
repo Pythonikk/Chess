@@ -13,7 +13,6 @@ class Board
 
   def initialize
     create
-    display
   end
 
   def create(pos = ['a', 8], color = :white)
@@ -39,33 +38,35 @@ class Board
       current_row = square.position[1].to_i
       puts "\n" if current_row < last_row
       if square.color == :white
-        print white_square
+        print white_square(square)
       else
-        print black_square
+        print black_square(square)
       end
       last_row = current_row
     end
   end
 
-  def white_square(occupied = false, piece = KNIGHT)
-    occupied_square = " #{piece}  ".colorize(:color => :black, :background => :white)
-    empty_square = '    '.colorize(:background => :white)
+  def white_square(square, piece = KNIGHT)
+    color = square.occupied_by.color if square.occupied?
+    occupied_square = " #{piece}  ".colorize(:color => color, :background => :light_blue)
+    empty_square = '    '.colorize(:background => :light_blue)
 
-    return occupied_square if occupied
+    return occupied_square if square.occupied?
 
     empty_square
   end
 
-  def black_square(occupied = false, piece = KNIGHT)
-    # piece.color
-    occupied_square = " #{piece}  ".colorize(:color => :white, :background => :light_black)
-    empty_square = '    '.colorize(:background => :light_black)
+  def black_square(square, piece = KNIGHT)
+    color = square.occupied_by.color if square.occupied?
+    occupied_square = " #{piece}  ".colorize(:color => color, :background => :blue)
+    empty_square = '    '.colorize(:background => :blue)
 
-    return occupied_square if occupied
+    return occupied_square if square.occupied?
 
     empty_square
   end
 
   # TEMP for testing
   KNIGHT = "\u{265E}".freeze
+  KNIGHT2 = "\u{2658}".freeze
 end
