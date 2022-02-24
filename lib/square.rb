@@ -2,7 +2,13 @@
 
 # an individual square on the board (the nodes)
 class Square
-  def initialize(position)
-  
+  attr_reader :position, :color, :occupied
+
+  def initialize(position, color)
+    @position = position
+    @color = color
+    @occupied = false
   end
+
+  def occupied?; end
 end
