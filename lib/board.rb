@@ -13,6 +13,7 @@ class Board
 
   def initialize
     create
+    display
   end
 
   def create(pos = ['a', 8], color = :white)
@@ -29,19 +30,20 @@ class Board
       color = colors.reject { |c| c == color }[0]
     end
     pos[1] -= 1
-    create(['a', pos[1]], colors.reject { |c| c == color }[0])
+    create(['a', pos[1]], color)
   end
 
   def display
-    4.times do
-      4.times do
-        print white_square, black_square
+    last_row = 0
+    Board.squares.each do |square|
+      current_row = square.position[1].to_i
+      puts "\n" if current_row < last_row
+      if square.color == :white
+        print white_square
+      else
+        print black_square
       end
-      puts "\n"
-      4.times do
-        print black_square, white_square
-      end
-      puts "\n"
+      last_row = current_row
     end
   end
 
