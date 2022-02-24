@@ -5,6 +5,12 @@ require 'colorized_string'
 
 # the game board
 class Board
+  class << self
+    attr_reader :squares
+  end
+
+  @squares = []
+
   def initialize; end
 
   def display
