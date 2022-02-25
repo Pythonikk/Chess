@@ -20,41 +20,27 @@ class Rook
 
   def moves
     @squares = []
-    north_moves
-    south_moves
-    row_left_moves
-    row_right_moves
+
+    column_moves(8, 1)
+    column_moves(1, -1)
+    row_moves('a', -1)
+    row_moves('h', 1)
+
     squares
   end
 
-  def north_moves
+  def column_moves(limit, alter)
     row = cp2
-    until row == 8
-      row += 1
+    until row == limit
+      row += alter
       squares << [cp1, row]
     end
   end
 
-  def south_moves
-    row = cp2
-    until row == 1
-      row -= 1
-      squares << [cp1, row]
-    end
-  end
-
-  def row_left_moves
+  def row_moves(limit, alter)
     column = cp1
-    until column == 'a'
-      column = Board.column(column, -1)
-      squares << [column, cp2]
-    end
-  end
-
-  def row_right_moves
-    column = cp1
-    until column == 'h'
-      column = Board.column(column, 1)
+    until column == limit
+      column = Board.column(column, alter)
       squares << [column, cp2]
     end
   end
