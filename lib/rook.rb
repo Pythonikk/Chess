@@ -3,7 +3,7 @@
 # defines the Rooks behavior
 class Rook
   attr_reader :type, :color, :start_pos, :current_pos,
-              :cp1, :cp2, :arr
+              :cp1, :cp2, :squares
 
   def initialize(type, color, pos)
     @type = type
@@ -19,19 +19,19 @@ class Rook
   end
 
   def moves
-    @arr = []
+    @squares = []
     north_moves
     south_moves
     row_left_moves
     row_right_moves
-    arr
+    squares
   end
 
   def north_moves
     row = cp2
     until row == 8
       row += 1
-      arr << [cp1, row]
+      squares << [cp1, row]
     end
   end
 
@@ -39,7 +39,7 @@ class Rook
     row = cp2
     until row == 1
       row -= 1
-      arr << [cp1, row]
+      squares << [cp1, row]
     end
   end
 
@@ -47,7 +47,7 @@ class Rook
     column = cp1
     until column == 'a'
       column = Board.column(column, -1)
-      arr << [column, cp2]
+      squares << [column, cp2]
     end
   end
 
@@ -55,7 +55,7 @@ class Rook
     column = cp1
     until column == 'h'
       column = Board.column(column, 1)
-      arr << [column, cp2]
+      squares << [column, cp2]
     end
   end
 end
