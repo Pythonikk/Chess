@@ -17,15 +17,15 @@ class King
     cp1 = current_pos[0]
     cp2 = current_pos[1].to_i
 
-    north_row = Board.column(cp1, 1)
-    south_row = Board.column(cp1, -1)
+    right_column = Board.column(cp1, 1)
+    left_column = Board.column(cp1, -1)
 
-    columns = [cp2 - 1, cp2, cp2 + 1]
+    rows = [cp2 - 1, cp2, cp2 + 1]
 
-    columns.each do |col|
-      arr << [north_row, col]
-      arr << [cp1, col]
-      arr << [south_row, col]
+    rows.each do |row|
+      arr << [right_column, row]
+      arr << [cp1, row]
+      arr << [left_column, row]
     end
 
     arr.map! { |i| i.join('').to_sym }
