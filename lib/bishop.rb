@@ -30,7 +30,7 @@ class Bishop
     # south_right_diagonal
     diagonal({ column: 'h', row: 1 }, 1, -1)
 
-    squares
+    format_squares
   end
 
   def diagonal(limit, c_alter, r_alter)
@@ -42,5 +42,9 @@ class Bishop
       row += r_alter
       squares << [column, row]
     end
+  end
+
+  def format_squares
+    squares.map! { |i| i.join('').to_sym }
   end
 end

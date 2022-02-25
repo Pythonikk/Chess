@@ -33,6 +33,8 @@ class Queen
     diagonal({ column: 'a', row: 1 }, -1, -1)
     # south_right_diagonal
     diagonal({ column: 'h', row: 1 }, 1, -1)
+
+    format_squares
   end
 
   def column_moves(limit, alter)
@@ -60,5 +62,9 @@ class Queen
       row += r_alter
       squares << [column, row]
     end
+  end
+
+  def format_squares
+    squares.map! { |i| i.join('').to_sym }
   end
 end

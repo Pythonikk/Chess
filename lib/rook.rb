@@ -26,7 +26,7 @@ class Rook
     row_moves('a', -1)
     row_moves('h', 1)
 
-    squares
+    format_squares
   end
 
   def column_moves(limit, alter)
@@ -43,5 +43,9 @@ class Rook
       column = Board.column(column, alter)
       squares << [column, cp2]
     end
+  end
+
+  def format_squares
+    squares.map! { |i| i.join('').to_sym }
   end
 end
