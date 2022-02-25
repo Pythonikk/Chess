@@ -8,21 +8,19 @@ class Piece
 
   @all = []
 
-  attr_reader :type, :color, :start_pos
-  attr_accessor :current_pos
+  SYMBOL = { king: "\u{265A}", queen: "\u{265B}", rook: "\u{265C}",
+             bishop: "\u{265D}", knight: "\u{265E}", pawn: "\u{265F}" }.freeze
 
-  def initialize(type, color, start_pos)
-    @type = type
-    @color = color
-    @start_pos = start_pos
-    @current_pos = start_pos
-    settle_in
-    Piece.all << self
+  def self.give_character(type, color, pos)
+    klass = Object.const_get(type.to_s.capitalize)
+    piece = klass.new(type, color, pos)
+    Piece.settle_in(piece)
+    Piece.all << piece
   end
 
-  def settle_in
-    square = Board.squares.select { |s| s.position == current_pos }[0]
-    square.occupied_by = self
+  def self.settle_in(piece)
+    square = Board.squares.select { |s| s.position == piece.current_pos }[0]
+    square.occupied_by = piece
   end
 
   WHITE = { rook: [:a1, :h1], knight: [:b1, :g1], bishop: [:c1, :f1], queen: :d1,

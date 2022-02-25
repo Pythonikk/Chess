@@ -44,11 +44,16 @@ class Board
       end
       last_row = current_row
     end
+    puts "\n"
   end
 
-  def white_square(square, piece = KNIGHT)
-    color = square.occupied_by.color if square.occupied?
+  def white_square(square)
+    if square.occupied?
+      color = square.occupied_by.color
+      piece = Piece::SYMBOL[square.occupied_by.type]
+    end
     occupied_square = " #{piece}  ".colorize(:color => color, :background => :light_blue)
+
     empty_square = '    '.colorize(:background => :light_blue)
 
     return occupied_square if square.occupied?
@@ -56,17 +61,17 @@ class Board
     empty_square
   end
 
-  def black_square(square, piece = KNIGHT)
-    color = square.occupied_by.color if square.occupied?
+  def black_square(square)
+    if square.occupied?
+      color = square.occupied_by.color
+      piece = Piece::SYMBOL[square.occupied_by.type]
+    end
     occupied_square = " #{piece}  ".colorize(:color => color, :background => :blue)
+
     empty_square = '    '.colorize(:background => :blue)
 
     return occupied_square if square.occupied?
 
     empty_square
   end
-
-  # TEMP for testing
-  KNIGHT = "\u{265E}".freeze
-  KNIGHT2 = "\u{2658}".freeze
 end
