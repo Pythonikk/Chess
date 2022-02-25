@@ -26,16 +26,4 @@ class Player
       end
     end
   end
-
-  # def set_up_pieces
-  #   pieces.each_pair do |type, pos|
-  #     if pos.is_a?(Array)
-  #       pos.each do |po|
-  #         Piece.new(type, color, po)
-  #       end
-  #     else
-  #       Piece.new(type, color, pos)
-  #     end
-  #   end
-  # end
 end

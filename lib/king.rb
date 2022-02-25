@@ -9,13 +9,26 @@ class King
     @color = color
     @pos = pos
     @current_pos = pos
-    Piece.settle_in(self)
   end
 
+  # current_pos looks like :b2
   def moves
-    current_pos[0] + 1 ||
-      current_pos[0] - 1 ||
-      current_pos[1] + 1 ||
-      current_pos[1] - 1
+    arr = []
+    cp1 = current_pos[0]
+    cp2 = current_pos[1].to_i
+
+    north_row = Board.column(cp1, 1)
+    south_row = Board.column(cp1, -1)
+
+    columns = [cp2 - 1, cp2, cp2 + 1]
+
+    columns.each do |col|
+      arr << [north_row, col]
+      arr << [cp1, col]
+      arr << [south_row, col]
+    end
+
+    arr.map! { |i| i.join('').to_sym }
+       .reject! { |i| i == current_pos }
   end
 end
