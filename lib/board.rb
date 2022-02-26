@@ -39,17 +39,36 @@ class Board
   end
 
   def display
-    last_row = 0
-    Board.squares.each do |square|
-      current_row = square.position[1].to_i
-      puts "\n" if current_row < last_row
+    print_column_letters
+    row = 8
+    until row.zero?
+      print_row(row)
+      row -= 1
+    end
+    print_column_letters
+  end
+
+  def print_column_letters
+    columns = %w[a b c d e f g h]
+    i = 0
+    until i == 8
+      print "   #{columns[i]}"
+      i += 1
+    end
+    puts "\n"
+  end
+
+  def print_row(row)
+    print "#{row} "
+    in_row = Board.squares.select { |s| s.position[1].to_i == row }
+    in_row.each do |square|
       if square.color == :white
         print white_square(square)
       else
         print black_square(square)
       end
-      last_row = current_row
     end
+    print " #{row}"
     puts "\n"
   end
 

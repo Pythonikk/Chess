@@ -13,7 +13,6 @@ class Game
     player1.set_up_pieces
     player2.set_up_pieces
     board.display
-    play
   end
 
   def play
