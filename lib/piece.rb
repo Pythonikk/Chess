@@ -3,10 +3,9 @@
 # abstract superclass
 class Piece
   attr_reader :color, :start_pos, :current_pos,
-              :cp1, :cp2, :squares, :type
+              :cp1, :cp2, :squares
 
-  def initialize(type, color, start_pos)
-    @type = type
+  def initialize(color, start_pos)
     @color = color
     @start_pos = start_pos
     @current_pos = start_pos

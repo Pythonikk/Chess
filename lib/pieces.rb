@@ -19,7 +19,7 @@ module Pieces
 
   def self.give_character(type, color, pos)
     klass = Object.const_get(type.to_s.capitalize)
-    piece = klass.new(type, color, pos)
+    piece = klass.new(color, pos)
     Pieces.settle_in(piece)
     Pieces.all << piece
   end

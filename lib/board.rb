@@ -72,31 +72,27 @@ class Board
     puts "\n"
   end
 
+  def color(square)
+    square.occupied_by.color
+  end
+
+  def symbol(square)
+    Pieces::SYMBOL[square.occupied_by.class.to_s.downcase.to_sym]
+  end
+
   def white_square(square)
     if square.occupied?
-      color = square.occupied_by.color
-      piece = Pieces::SYMBOL[square.occupied_by.type]
+      " #{symbol(square)}  ".colorize(color: color(square), background: :light_blue)
+    else
+      '    '.colorize(background: :light_blue)
     end
-    occupied_square = " #{piece}  ".colorize(:color => color, :background => :light_blue)
-
-    empty_square = '    '.colorize(:background => :light_blue)
-
-    return occupied_square if square.occupied?
-
-    empty_square
   end
 
   def black_square(square)
     if square.occupied?
-      color = square.occupied_by.color
-      piece = Pieces::SYMBOL[square.occupied_by.type]
+      " #{symbol(square)}  ".colorize(color: color(square), background: :blue)
+    else
+      '    '.colorize(background: :blue)
     end
-    occupied_square = " #{piece}  ".colorize(:color => color, :background => :blue)
-
-    empty_square = '    '.colorize(:background => :blue)
-
-    return occupied_square if square.occupied?
-
-    empty_square
   end
 end
