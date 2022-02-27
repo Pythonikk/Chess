@@ -12,6 +12,6 @@ class Square
   end
 
   def occupied?
-    Piece.all.collect(&:current_pos).include?(position)
+    Pieces.all.collect(&:current_pos).include?(position)
   end
 end

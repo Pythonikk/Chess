@@ -2,7 +2,10 @@
 
 # the users
 class Player
+  include Pieces
+
   attr_reader :color
+  attr_accessor :graveyard
 
   def initialize(color)
     @color = color
@@ -10,19 +13,19 @@ class Player
   end
 
   def pieces
-    return Piece::WHITE if color == :white
+    return Pieces::WHITE if color == :white
 
-    Piece::BLACK
+    Pieces::BLACK
   end
 
   def set_up_pieces
     pieces.each_pair do |type, pos|
       if pos.is_a?(Array)
         pos.each do |po|
-          Piece.give_character(type, color, po)
+          Pieces.give_character(type, color, po)
         end
       else
-        Piece.give_character(type, color, pos)
+        Pieces.give_character(type, color, pos)
       end
     end
   end

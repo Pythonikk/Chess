@@ -75,7 +75,7 @@ class Board
   def white_square(square)
     if square.occupied?
       color = square.occupied_by.color
-      piece = Piece::SYMBOL[square.occupied_by.type]
+      piece = Pieces::SYMBOL[square.occupied_by.type]
     end
     occupied_square = " #{piece}  ".colorize(:color => color, :background => :light_blue)
 
@@ -89,7 +89,7 @@ class Board
   def black_square(square)
     if square.occupied?
       color = square.occupied_by.color
-      piece = Piece::SYMBOL[square.occupied_by.type]
+      piece = Pieces::SYMBOL[square.occupied_by.type]
     end
     occupied_square = " #{piece}  ".colorize(:color => color, :background => :blue)
 
