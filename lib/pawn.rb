@@ -14,7 +14,10 @@ class Pawn < Piece
   end
 
   def forward_move
-    squares << [cp1, cp2 + 1]
+    arr = []
+    arr << starting_move
+    arr << [cp1, cp2 + 1]
+    squares << arr
   end
 
   # can move diagonally to capture

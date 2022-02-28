@@ -2,41 +2,73 @@
 
 # handles the behavior of a move made by player
 class Move
-  class << self
-    attr_accessor :record
-  end
+  # class << self
+  #   attr_accessor :record
+  # end
 
-  # all the moves made in a game
-  @record = []
+  # # all the moves made in a game
+  # @record = []
 
-  attr_reader :player, :move, :piece
+  attr_reader :player, :move, :piece, :landing_square
 
   def initialize(player)
     @player = player
     puts "#{player.color.to_s.capitalize}'s turn!"
     initiate
-    Move.record << move
+    # Move.record << move
   end
 
   def initiate
     @move = player_input
     @piece = square(move[0]).occupied_by
+    @landing_square = square(move[1])
 
-    if evaluate_move.is_a?(Symbol)
-      display_move_error(evaluate_move)
-      initiate
-    end
+    return unless evaluate_move.is_a?(Symbol)
+
+    display_move_error(evaluate_move)
+    initiate
   end
 
   def evaluate_move
     return :wrong_color unless players_piece?
+    return :occupied_landing unless unoccupied_landing?
+    return :obstructed_path unless path_clear?
 
-    # the piece player has selected is their own piece.
-    # the square to land on is unoccupied?
     # there are no pieces in the way if piece doesnt hop
+    # piece can't move that way, could print out where a piece can move
     # if castling then valid castling?
     # if pawn then taking en-passant?
     # move does not put players own king in check
+  end
+
+  def path_clear?
+    path.each do |pos|
+      return false unless square(pos).occupied_by.nil?
+    end
+    true
+  end
+
+  def path
+    way = piece.moves
+               .select { |array| array.include?(landing_square.position) }
+               .flatten
+    index = way.find_index(landing_square.position)
+    way[0..index]
+  end
+
+  def unoccupied_landing?
+    landing_square.occupied_by.nil?
+  end
+
+  def display_move_error(error)
+    case error
+    when :wrong_color
+      puts "Select a #{player.color.to_s.capitalize} piece to move."
+    when :occupied_landing
+      puts "You already occupy the square you're trying to move to."
+    when :obstructed_path
+      puts "The path to #{landing_square.position} is obstructed."
+    end
   end
 
   def players_piece?
@@ -62,12 +94,5 @@ class Move
 
   def valid?(input)
     square(input[0]) && square(input[1])
-  end
-
-  def display_move_error(error)
-    case error
-    when :wrong_color
-      puts "Select a #{player.color.to_s.capitalize} piece to move."
-    end
   end
 end

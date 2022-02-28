@@ -18,6 +18,13 @@ class Piece
   end
 
   def format_squares
-    squares.map! { |i| i.join('').to_sym }
+    squares.compact!
+    squares.each do |array|
+      array.map! { |i| i.join('').to_sym }
+    end
+  end
+
+  def update_position(pos)
+    self.current_pos = pos
   end
 end

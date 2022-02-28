@@ -5,27 +5,31 @@ class Rook < Piece
   def moves
     @squares = []
 
-    column_moves(8, 1)
-    column_moves(1, -1)
-    row_moves('a', -1)
-    row_moves('h', 1)
+    squares << column_moves(8, 1)
+    squares << column_moves(1, -1)
+    squares << row_moves('a', -1)
+    squares << row_moves('h', 1)
 
     format_squares
   end
 
   def column_moves(limit, alter)
+    arr = []
     row = cp2
     until row == limit
       row += alter
-      squares << [cp1, row]
+      arr << [cp1, row]
     end
+    arr unless arr.empty?
   end
 
   def row_moves(limit, alter)
+    arr = []
     column = cp1
     until column == limit
       column = Board.column(column, alter)
-      squares << [column, cp2]
+      arr << [column, cp2]
     end
+    arr unless arr.empty?
   end
 end
