@@ -3,7 +3,7 @@
 # defines the Pawns behavior
 class Pawn < Piece
   def moves
-    @squares = []
+    reset_moves
     squares << forward_move
     squares << starting_move
     format_squares

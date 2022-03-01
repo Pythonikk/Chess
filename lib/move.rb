@@ -2,13 +2,6 @@
 
 # handles the behavior of a move made by player
 class Move
-  # class << self
-  #   attr_accessor :record
-  # end
-
-  # # all the moves made in a game
-  # @record = []
-
   attr_reader :player, :move, :piece, :landing_square
 
   def initialize(player)
@@ -16,7 +9,6 @@ class Move
     puts "#{player.color.to_s.capitalize}'s turn!"
     initiate
     update_state
-    # Move.record << move
   end
 
   def update_state
@@ -41,13 +33,45 @@ class Move
 
   def evaluate_move
     return :wrong_color unless players_piece?
-    return :occupied_landing unless unoccupied_landing?
+    return :invalid_movement unless valid_movement?
     return :obstructed_path unless path_clear?
-
-    # piece can't move that way, could print out where a piece can move
+    return :occupied_landing unless unoccupied_landing?
     # if castling then valid castling?
     # if pawn then taking en-passant?
     # move does not put players own king in check
+  end
+
+  def display_move_error(error)
+    case error
+    when :wrong_color
+      puts "=> Select a #{player.color.to_s.capitalize} piece to move."
+    when :occupied_landing
+      puts "=> You already occupy the square you're trying to move to."
+    when :obstructed_path
+      puts "=> The path to #{landing_square.position} is obstructed."
+    when :invalid_movement
+      puts "=> Might be time to review how a #{piece.class} moves."
+    end
+  end
+
+  def capture
+
+  end
+
+  # returns the square at position
+  def square(position)
+    square = Board.squares.select { |s| s.position == position }[0]
+    return square if square
+
+    puts 'An invalid square was entered'
+  end
+
+  def valid_movement?
+    return true if piece.moves[0].is_a?(Array) &&
+                   piece.moves.any? { |m| m.include?(landing_square.position) } ||
+                   piece.moves.include?(landing_square.position)
+
+    false
   end
 
   def path_clear?
@@ -84,31 +108,12 @@ class Move
     landing_square.occupied_by.nil?
   end
 
-  def display_move_error(error)
-    case error
-    when :wrong_color
-      puts "Select a #{player.color.to_s.capitalize} piece to move."
-    when :occupied_landing
-      puts "You already occupy the square you're trying to move to."
-    when :obstructed_path
-      puts "The path to #{landing_square.position} is obstructed."
-    end
-  end
-
   def players_piece?
     piece.color == player.color
   end
 
-  # returns the square at position
-  def square(position)
-    square = Board.squares.select { |s| s.position == position }[0]
-    return square if square
-
-    puts 'An invalid square was entered'
-  end
-
   def player_input
-    puts 'What position do you want to move from and to where?'
+    puts 'Move: '
     # player should input like 'b3 c5'
     input = gets.chomp.split(' ').map(&:to_sym)
     return input if valid?(input)

@@ -3,7 +3,7 @@
 # defines the kings behavior
 class King < Piece
   def moves
-    @squares = []
+    reset_moves
 
     right_column = Board.column(cp1, 1)
     left_column = Board.column(cp1, -1)

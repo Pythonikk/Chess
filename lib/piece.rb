@@ -17,6 +17,10 @@ class Piece
     abbreviate
   end
 
+  def moves
+    raise NotImplementedError, "#moves for instance of #{self.class}..."
+  end
+
   def abbreviate
     @cp1 = current_pos[0]
     @cp2 = current_pos[1].to_i

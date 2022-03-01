@@ -3,7 +3,7 @@
 # defines the Knights behavior
 class Knight < Piece
   def moves
-    @squares = []
+    reset_moves
 
     alterations.each do |a|
       column = Board.column(cp1, a[0])

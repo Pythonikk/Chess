@@ -3,8 +3,7 @@
 # defines the Bishops behavior
 class Bishop < Piece
   def moves
-    # squares should house the path to each valid landing square
-    @squares = []
+    reset_moves
 
     # north_left_diagonal
     squares << diagonal({ column: 'a', row: 8 }, -1, 1)
