@@ -12,7 +12,8 @@ class Game
     @player2 = Player.new(:black)
     player1.set_up_pieces
     player2.set_up_pieces
-    board.display
+    # board.display
+    Display.output
     play
   end
 
@@ -20,9 +21,9 @@ class Game
     # until game_over?
     loop do
       Move.new(player1, player2)
-      board.display
+      Display.output
       Move.new(player2, player1)
-      board.display
+      Display.output
     end
   end
 
