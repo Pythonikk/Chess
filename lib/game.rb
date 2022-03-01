@@ -18,8 +18,12 @@ class Game
 
   def play
     # until game_over?
-    Move.new(player1)
-    Move.new(player2)
+    loop do
+      Move.new(player1)
+      board.display
+      Move.new(player2)
+      board.display
+    end
   end
 
   def game_over?

@@ -2,13 +2,18 @@
 
 # abstract superclass
 class Piece
-  attr_reader :color, :start_pos, :current_pos,
-              :cp1, :cp2, :squares
+  attr_reader :color, :start_pos, :cp1, :cp2, :squares
+  attr_accessor :current_pos
 
   def initialize(color, start_pos)
     @color = color
     @start_pos = start_pos
     @current_pos = start_pos
+    abbreviate
+  end
+
+  def reset_moves
+    @squares = []
     abbreviate
   end
 
@@ -19,12 +24,12 @@ class Piece
 
   def format_squares
     squares.compact!
-    squares.each do |array|
-      array.map! { |i| i.join('').to_sym }
+    if squares[0][0].is_a?(Array)
+      squares.each do |array|
+        array.map! { |i| i.join('').to_sym }
+      end
+    else
+      squares.map! { |i| i.join('').to_sym }
     end
-  end
-
-  def update_position(pos)
-    self.current_pos = pos
   end
 end

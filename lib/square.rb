@@ -12,6 +12,9 @@ class Square
   end
 
   def occupied?
-    Pieces.all.collect(&:current_pos).include?(position)
+    return true unless occupied_by.nil?
+
+    false
+    # Pieces.all.collect(&:current_pos).include?(position)
   end
 end

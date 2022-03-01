@@ -3,7 +3,7 @@
 # defines the Queens behavior
 class Queen < Piece
   def moves
-    @squares = []
+    reset_moves
 
     squares << column_moves(8, 1)
     squares << column_moves(1, -1)

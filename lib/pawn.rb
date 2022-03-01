@@ -4,20 +4,26 @@
 class Pawn < Piece
   def moves
     @squares = []
-    starting_move
-    forward_move
+    squares << forward_move
+    squares << starting_move
     format_squares
   end
 
   def starting_move
-    squares << [cp1, cp2 + 2]
+    arr = []
+    if color == :white
+      arr << [cp1, cp2 + 1] # one forward move
+      arr << [cp1, cp2 + 2]
+    else
+      arr << [cp1, cp2 - 1] # one forward move
+      arr << [cp1, cp2 - 2]
+    end
+    arr
   end
 
   def forward_move
-    arr = []
-    arr << starting_move
-    arr << [cp1, cp2 + 1]
-    squares << arr
+    return [[cp1, cp2 + 1]] if color == :white
+    return [[cp1, cp2 - 1]] if color == :black
   end
 
   # can move diagonally to capture

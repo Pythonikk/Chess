@@ -15,7 +15,17 @@ class Move
     @player = player
     puts "#{player.color.to_s.capitalize}'s turn!"
     initiate
+    update_state
     # Move.record << move
+  end
+
+  def update_state
+    # update piece position
+    piece.current_pos = landing_square.position
+    # update square occupation status
+    landing_square.occupied_by = piece
+    # old square now unoccupied
+    square(move[0]).occupied_by = nil
   end
 
   def initiate
@@ -34,7 +44,6 @@ class Move
     return :occupied_landing unless unoccupied_landing?
     return :obstructed_path unless path_clear?
 
-    # there are no pieces in the way if piece doesnt hop
     # piece can't move that way, could print out where a piece can move
     # if castling then valid castling?
     # if pawn then taking en-passant?
@@ -42,18 +51,33 @@ class Move
   end
 
   def path_clear?
+    return true unless path_required?
+
     path.each do |pos|
       return false unless square(pos).occupied_by.nil?
     end
     true
   end
 
+  # if piece only moves one square, don't call path
+  def path_required?
+    return false if piece.is_a?(Knight) || piece.is_a?(King)
+
+    next_to_columns = [Board.column(piece.cp1, -1), Board.column(piece.cp1, 1)]
+    next_to_rows = [piece.cp2 + 1, piece.cp2 - 1]
+
+    return true unless next_to_columns.include?(landing_square.position[0]) ||
+                       next_to_rows.include?(landing_square.position[1].to_i)
+  end
+
+  # path only works for pieces moving more than one square away
   def path
     way = piece.moves
                .select { |array| array.include?(landing_square.position) }
                .flatten
     index = way.find_index(landing_square.position)
-    way[0..index]
+    # the landing square could be a capture so don't count it in path
+    way[0..(index - 1)]
   end
 
   def unoccupied_landing?
