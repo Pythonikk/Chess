@@ -6,6 +6,7 @@ class Pawn < Piece
     reset_moves
     squares << forward_move
     squares << starting_move
+    squares << capture_moves
     format_squares
   end
 
@@ -31,6 +32,7 @@ class Pawn < Piece
     right_column = Board.column(cp1, 1)
     left_column = Board.column(cp1, -1)
 
-    [[right_column, cp2 + 1], [left_column, cp2 + 1]]
+    return [[right_column, cp2 + 1], [left_column, cp2 + 1]] if color == :white
+    return [[right_column, cp2 - 1], [left_column, cp2 - 1]] if color == :black
   end
 end

@@ -2,12 +2,14 @@
 
 # handles the behavior of a move made by player
 class Move
-  attr_reader :player, :move, :piece, :landing_square
+  attr_reader :player, :move, :piece, :landing_square, :opponent
 
-  def initialize(player)
+  def initialize(player, opponent)
     @player = player
+    @opponent = opponent
     puts "#{player.color.to_s.capitalize}'s turn!"
     initiate
+    capture if capture?
     update_state
   end
 
@@ -36,6 +38,10 @@ class Move
     return :invalid_movement unless valid_movement?
     return :obstructed_path unless path_clear?
     return :occupied_landing unless unoccupied_landing?
+    return unless pawn_diagonal?
+
+    return :illegal_pawn unless pawn_capture?
+
     # if castling then valid castling?
     # if pawn then taking en-passant?
     # move does not put players own king in check
@@ -51,11 +57,28 @@ class Move
       puts "=> The path to #{landing_square.position} is obstructed."
     when :invalid_movement
       puts "=> Might be time to review how a #{piece.class} moves."
+    when :illegal_pawn
+      puts "=> Your pawn cannot move diagonally without capturing."
     end
   end
 
-  def capture
+  def capture?
+    landing_square.occupied?
+  end
 
+  def capture
+    opponent.graveyard << landing_square.occupied_by
+  end
+
+  def pawn_diagonal?
+    piece.is_a?(Pawn) &&
+      landing_square.position[0] != piece.current_pos[0]
+  end
+
+  def pawn_capture?
+    return true if landing_square.occupied?
+
+    false
   end
 
   # returns the square at position
@@ -105,7 +128,8 @@ class Move
   end
 
   def unoccupied_landing?
-    landing_square.occupied_by.nil?
+    landing_square.occupied_by.nil? ||
+      landing_square.occupied_by.color != player.color
   end
 
   def players_piece?

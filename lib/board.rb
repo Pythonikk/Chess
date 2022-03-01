@@ -38,7 +38,12 @@ class Board
     create(['a', pos[1]], color)
   end
 
+  def headstone
+    "\u{1FAA6}"
+  end
+
   def display
+    display_graveyard(:black)
     print_column_letters
     row = 8
     until row.zero?
@@ -46,6 +51,18 @@ class Board
       row -= 1
     end
     print_column_letters
+    display_graveyard(:white)
+  end
+
+  def display_graveyard(color)
+    graveyard(color).map! { |p| Pieces::SYMBOL[p.class.to_s.downcase.to_sym] }
+    puts " #{headstone}  #{graveyard(color).join('')}"
+  end
+
+  def graveyard(color)
+    ObjectSpace.each_object(Player).to_a
+               .select { |p| p.color == color }[0]
+               .graveyard
   end
 
   def print_column_letters

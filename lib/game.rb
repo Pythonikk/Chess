@@ -19,9 +19,9 @@ class Game
   def play
     # until game_over?
     loop do
-      Move.new(player1)
+      Move.new(player1, player2)
       board.display
-      Move.new(player2)
+      Move.new(player2, player1)
       board.display
     end
   end
