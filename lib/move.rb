@@ -41,17 +41,16 @@ class Move
     return :obstructed_path unless path_clear?
     return :occupied_landing unless unoccupied_landing?
 
-    return :checks_self if puts_in_check?
-    # return unless in_check?
-    # return :in_check unless out_of_check?
+    if in_check?
+      return :in_check if puts_in_check?
+    elsif puts_in_check?
+      return :checks_self
+    end
 
-    return unless pawn_diagonal?
-
-    return :illegal_pawn unless pawn_capture?
+    return :illegal_pawn if pawn_diagonal? && !pawn_capture?
 
     # if castling then valid castling?
     # if pawn then taking en-passant?
-    # move does not put players own king in check
   end
 
   def display_move_error(error)
@@ -87,9 +86,16 @@ class Move
   end
 
   def move_gives_check?
-    player.pieces.each do |piece|
-      # ATTENTION: need to check PATH!
-      return true if piece.moves.include?(opponent.king_pos)
+    player.pieces.each do |pp|
+      next unless pp.moves.any? { |m| m.include?(opponent.king_pos) }
+
+      return true unless path_required?(pp, opponent.king_pos)
+
+      path(pp, opponent.king_pos).each do |pos|
+        next unless square(pos).occupied_by.nil?
+
+        return true
+      end
     end
     false
   end

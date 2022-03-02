@@ -4,6 +4,13 @@ require 'pry-byebug'
 
 # controls the course of the game
 class Game
+  class << self
+    attr_accessor :mate, :stalemate
+  end
+
+  @mate = false
+  @stalemate = false
+
   attr_reader :board, :player1, :player2
 
   def initialize
@@ -24,11 +31,7 @@ class Game
     end
   end
 
-  def game_over?
-    mate? || stalemate?
-  end
-
-  def mate?; end
-
-  def stalemate; end
+  # def game_over?
+  #   mate || stalemate
+  # end
 end
