@@ -21,8 +21,9 @@ class Display
 
   def self.display_graveyard(color)
     graveyard(color).map! { |p| Pieces::SYMBOL[p.class.to_s.downcase.to_sym] }
-    puts " #{headstone}  #{graveyard(color).join('')}"
+    puts " #{headstone}  #{graveyard(color).join('')}".colorize(color: color)
   end
+
 
   def self.graveyard(color)
     ObjectSpace.each_object(Player).to_a

@@ -9,17 +9,19 @@ class Move
     @opponent = opponent
     puts "#{player.color.to_s.capitalize}'s turn!"
     initiate
-    capture if capture?
     update_state
   end
 
   def update_state
+    capture if capture?
     # update piece position
     piece.current_pos = landing_square.position
     # update square occupation status
     landing_square.occupied_by = piece
     # old square now unoccupied
     square(move[0]).occupied_by = nil
+
+    give_check if move_gives_check?
   end
 
   def initiate
@@ -38,6 +40,11 @@ class Move
     return :invalid_movement unless valid_movement?
     return :obstructed_path unless path_clear?
     return :occupied_landing unless unoccupied_landing?
+
+    return :checks_self if puts_in_check?
+    # return unless in_check?
+    # return :in_check unless out_of_check?
+
     return unless pawn_diagonal?
 
     return :illegal_pawn unless pawn_capture?
@@ -58,8 +65,80 @@ class Move
     when :invalid_movement
       puts "=> Might be time to review how a #{piece.class} moves."
     when :illegal_pawn
-      puts "=> Your pawn cannot move diagonally without capturing."
+      puts '=> Your pawn cannot move diagonally without capturing.'
+    when :in_check
+      puts '=> Your King is in check. You must move or guard him.'
+    when :checks_self
+      puts '=> That move is illegal, it puts your King in check.'
     end
+  end
+
+  def in_check?
+    player.in_check == true
+  end
+
+  def remove_check
+    player.in_check = false
+  end
+
+  def give_check
+    opponent.in_check = true
+    puts "***#{opponent.color.capitalize} is in check ***"
+  end
+
+  def move_gives_check?
+    player.pieces.each do |piece|
+      # ATTENTION: need to check PATH!
+      return true if piece.moves.include?(opponent.king_pos)
+    end
+    false
+  end
+
+  def puts_in_check?(king_pos = player.king_pos)
+    king_pos = landing_square.position if piece.is_a?(King)
+
+    opponent.pieces.each do |op|
+      next unless op.moves.any? { |m| m.include?(king_pos) }
+
+      return true unless path_required?(op, king_pos)
+
+      path(op, king_pos).each do |pos|
+        next unless square(pos).occupied_by.nil?
+
+        return true
+      end
+    end
+    false
+  end
+
+  def path_clear?
+    return true unless path_required?
+
+    path.each do |pos|
+      return false unless square(pos).occupied_by.nil?
+    end
+    true
+  end
+
+  # if piece only moves one square, don't call path
+  def path_required?(piece = @piece, position = landing_square.position)
+    return false if piece.is_a?(Knight) || piece.is_a?(King)
+
+    next_to_columns = [Board.column(piece.cp1, -1), Board.column(piece.cp1, 1)]
+    next_to_rows = [piece.cp2 + 1, piece.cp2 - 1]
+
+    return true unless next_to_columns.include?(position[0]) ||
+                       next_to_rows.include?(position[1].to_i)
+  end
+
+  # path only works for pieces moving more than one square away
+  def path(piece = @piece, position = landing_square.position)
+    way = piece.moves
+               .select { |array| array.include?(position) }
+               .flatten
+    index = way.find_index(position)
+    # the landing square could be a capture so don't count it in path
+    way[0..(index - 1)]
   end
 
   def capture?
@@ -68,6 +147,7 @@ class Move
 
   def capture
     opponent.graveyard << landing_square.occupied_by
+    opponent.pieces.reject! { |piece| piece == landing_square.occupied_by }
   end
 
   def pawn_diagonal?
@@ -97,36 +177,6 @@ class Move
     false
   end
 
-  def path_clear?
-    return true unless path_required?
-
-    path.each do |pos|
-      return false unless square(pos).occupied_by.nil?
-    end
-    true
-  end
-
-  # if piece only moves one square, don't call path
-  def path_required?
-    return false if piece.is_a?(Knight) || piece.is_a?(King)
-
-    next_to_columns = [Board.column(piece.cp1, -1), Board.column(piece.cp1, 1)]
-    next_to_rows = [piece.cp2 + 1, piece.cp2 - 1]
-
-    return true unless next_to_columns.include?(landing_square.position[0]) ||
-                       next_to_rows.include?(landing_square.position[1].to_i)
-  end
-
-  # path only works for pieces moving more than one square away
-  def path
-    way = piece.moves
-               .select { |array| array.include?(landing_square.position) }
-               .flatten
-    index = way.find_index(landing_square.position)
-    # the landing square could be a capture so don't count it in path
-    way[0..(index - 1)]
-  end
-
   def unoccupied_landing?
     landing_square.occupied_by.nil? ||
       landing_square.occupied_by.color != player.color
@@ -138,7 +188,6 @@ class Move
 
   def player_input
     puts 'Move: '
-    # player should input like 'b3 c5'
     input = gets.chomp.split(' ').map(&:to_sym)
     return input if valid?(input)
 

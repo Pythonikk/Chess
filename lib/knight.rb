@@ -8,7 +8,7 @@ class Knight < Piece
     alterations.each do |a|
       column = Board.column(cp1, a[0])
       row = cp2 + a[1]
-      squares << [column, row]
+      squares << [[column, row]]
     end
     format_squares
   end

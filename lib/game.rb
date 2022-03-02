@@ -10,9 +10,6 @@ class Game
     @board = Board.new
     @player1 = Player.new(:white)
     @player2 = Player.new(:black)
-    player1.set_up_pieces
-    player2.set_up_pieces
-    # board.display
     Display.output
     play
   end
