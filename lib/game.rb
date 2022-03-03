@@ -9,7 +9,6 @@ class Game
   end
 
   @mate = false
-  @stalemate = false
 
   attr_reader :board, :player1, :player2
 
@@ -22,15 +21,13 @@ class Game
   end
 
   def play
-    # until game_over?
-    loop do
+    until Game.mate
       Move.new(player1, player2)
       Display.output
-      break if Game.mate || Game.stalemate
+      break if Game.mate
 
       Move.new(player2, player1)
       Display.output
-      break if Game.mate || Game.stalemate
     end
   end
 end

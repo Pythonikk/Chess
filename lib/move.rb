@@ -2,6 +2,8 @@
 
 # handles the behavior of a move made by player
 class Move
+  # include Castling
+
   attr_reader :player, :move, :piece, :landing_square, :opponent
 
   def initialize(player, opponent)
@@ -18,8 +20,9 @@ class Move
     landing_square.occupied_by = piece
     square(move[0]).occupied_by = nil
 
+    return mate if mated?
+
     give_check if move_gives_check?
-    # give_mate if opponent.in_check && mated?
     return unless piece.is_a?(Pawn)
 
     piece.give_en_passant if piece.giving_en_passant?(move[0])
@@ -33,9 +36,13 @@ class Move
     player.pieces.reject! { |pi| pi == piece }
   end
 
-  def give_mate
+  def mated?
+    opponent.graveyard.any? { |piece| piece.is_a?(King) }
+  end
+
+  def mate
     Game.mate = true
-    puts "Mated!"
+    puts "*** #{player.color.capitalize} wins! ***"
   end
 
   def initiate
@@ -125,18 +132,6 @@ class Move
     opponent.in_check = true
     puts "*** #{opponent.color.capitalize} is in check ***"
   end
-
-  # opponent cannot make a legal move to get out of check
-  # def mated?
-  #   # if any piece cannot make a move that doesn't put in check,
-  #   opponent.pieces.each do |op|
-  #     # if every move puts_in_check? there are no legal moves?
-  #     op.moves.each do
-  #       return false unless puts_in_check?(opponent.king_pos)
-  #     end
-  #   end
-  #   true
-  # end
 
   def move_gives_check?
     player.pieces.each do |pp|
