@@ -6,8 +6,10 @@ require 'colorized_string'
 # handles what gets printed in the terminal
 class Display
   def self.output
-    puts'-------------------------------------'
+    puts "\n"
+
     display_graveyard(:black)
+    puts "\n"
     print_column_letters
     row = 8
     until row.zero?
@@ -16,12 +18,13 @@ class Display
     end
     print_column_letters
     display_graveyard(:white)
-    puts'-------------------------------------'
+    puts "\n"
   end
 
   def self.display_graveyard(color)
-    graveyard(color).map! { |p| Pieces::SYMBOL[p.class.to_s.downcase.to_sym] }
-    puts " #{headstone}  #{graveyard(color).join('')}".colorize(color: color)
+    print " #{headstone}  "
+    graveyard(color).map { |p| Pieces::SYMBOL[p.class.to_s.downcase.to_sym] }
+                    .each { |g| print g.to_s.colorize(color: color) }
   end
 
 
