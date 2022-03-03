@@ -22,6 +22,7 @@ module Pieces
     piece = klass.new(color, pos)
     Pieces.settle_in(piece)
     Pieces.all << piece
+    piece
   end
 
   def self.settle_in(piece)

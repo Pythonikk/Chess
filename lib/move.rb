@@ -23,6 +23,14 @@ class Move
     return unless piece.is_a?(Pawn)
 
     piece.give_en_passant if piece.giving_en_passant?(move[0])
+    promote if piece.promotion?
+  end
+
+  def promote
+    role = piece.promote
+    np = Pieces.give_character(role, player.color, piece.current_pos)
+    player.pieces << np
+    player.pieces.reject! { |pi| pi == piece }
   end
 
   def give_mate
@@ -119,16 +127,16 @@ class Move
   end
 
   # opponent cannot make a legal move to get out of check
-  def mated?
-    # if any piece cannot make a move that doesn't put in check,
-    opponent.pieces.each do |op|
-      # if every move puts_in_check? there are no legal moves?
-      op.moves.each do
-        return false unless puts_in_check?(opponent.king_pos)
-      end
-    end
-    true
-  end
+  # def mated?
+  #   # if any piece cannot make a move that doesn't put in check,
+  #   opponent.pieces.each do |op|
+  #     # if every move puts_in_check? there are no legal moves?
+  #     op.moves.each do
+  #       return false unless puts_in_check?(opponent.king_pos)
+  #     end
+  #   end
+  #   true
+  # end
 
   def move_gives_check?
     player.pieces.each do |pp|

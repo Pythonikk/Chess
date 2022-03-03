@@ -12,6 +12,26 @@ class Pawn < Piece
     format_squares
   end
 
+  def promotion?
+    h = { white: '8', black: '1' }
+    h[color] == current_pos[1]
+  end
+
+  def promote_options
+    { 1 => :queen, 2 => :bishop, 3 => :rook, 4 => :knight }
+  end
+
+  def promote
+    puts "Your pawn has been promoted! Select promotion: "
+    puts promote_options
+    input = gets.chomp.to_i
+    until promote_options.keys.include?(input)
+      puts "Invalid input. Choose 1, 2, 3, or 4."
+      input = gets.chomp.to_i
+    end
+    promote_options[input]
+  end
+
   def first_turn
     current_pos == start_pos
   end
@@ -55,6 +75,8 @@ class Pawn < Piece
   end
 
   def opponent_pawn(square)
+    # square will be nil if pawn is at edge of the board
+    return nil if square.nil?
     return square.occupied_by if square.occupied_by.is_a?(Pawn) &&
                                  square.occupied_by.color != color
   end
