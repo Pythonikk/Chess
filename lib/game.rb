@@ -26,12 +26,11 @@ class Game
     loop do
       Move.new(player1, player2)
       Display.output
+      break if Game.mate || Game.stalemate
+
       Move.new(player2, player1)
       Display.output
+      break if Game.mate || Game.stalemate
     end
   end
-
-  # def game_over?
-  #   mate || stalemate
-  # end
 end

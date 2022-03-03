@@ -14,14 +14,20 @@ class Move
 
   def update_state
     capture if capture?
-    # update piece position
     piece.current_pos = landing_square.position
-    # update square occupation status
     landing_square.occupied_by = piece
-    # old square now unoccupied
     square(move[0]).occupied_by = nil
 
     give_check if move_gives_check?
+    # give_mate if opponent.in_check && mated?
+    return unless piece.is_a?(Pawn)
+
+    piece.give_en_passant if piece.giving_en_passant?(move[0])
+  end
+
+  def give_mate
+    Game.mate = true
+    puts "Mated!"
   end
 
   def initiate
@@ -29,9 +35,16 @@ class Move
     @piece = square(move[0]).occupied_by
     @landing_square = square(move[1])
 
-    return unless evaluate_move.is_a?(Symbol)
+    if piece.is_a?(Pawn) &&
+       piece.taking_en_passant?(landing_square.position)
+      pawn_en_passant
+      return
+    end
 
-    display_move_error(evaluate_move)
+    error = evaluate_move
+    return unless error
+
+    display_move_error(error)
     initiate
   end
 
@@ -47,7 +60,10 @@ class Move
       return :checks_self
     end
 
+    return unless piece.is_a?(Pawn)
+
     return :illegal_pawn if pawn_diagonal? && !pawn_capture?
+    return :blocked if blocked_forward?
 
     # if castling then valid castling?
     # if pawn then taking en-passant?
@@ -69,7 +85,24 @@ class Move
       puts '=> Your King is in check. You must move or guard him.'
     when :checks_self
       puts '=> That move is illegal, it puts your King in check.'
+    when :blocked
+      puts '=> Your pawn is blocked.'
     end
+  end
+
+  def pawn_en_passant
+    piece.current_pos = landing_square.position
+    # using this to reset cp1 and cp2 for now
+    piece.abbreviate
+    piece.en_passant = false
+
+    taking_pawn = piece.neighbor[:south] if piece.color == :white
+    taking_pawn = piece.neighbor[:north] if piece.color == :black
+
+    opponent.graveyard << taking_pawn
+    opponent.pieces.reject! { |piece| piece == taking_pawn }
+    s = Board.squares.select { |sq| sq.occupied_by == taking_pawn }[0]
+    s.occupied_by = nil
   end
 
   def in_check?
@@ -82,7 +115,19 @@ class Move
 
   def give_check
     opponent.in_check = true
-    puts "***#{opponent.color.capitalize} is in check ***"
+    puts "*** #{opponent.color.capitalize} is in check ***"
+  end
+
+  # opponent cannot make a legal move to get out of check
+  def mated?
+    # if any piece cannot make a move that doesn't put in check,
+    opponent.pieces.each do |op|
+      # if every move puts_in_check? there are no legal moves?
+      op.moves.each do
+        return false unless puts_in_check?(opponent.king_pos)
+      end
+    end
+    true
   end
 
   def move_gives_check?
@@ -167,6 +212,16 @@ class Move
     false
   end
 
+  def pawn_forward?
+    true unless pawn_diagonal?
+  end
+
+  # for pawns
+  def blocked_forward?
+    piece.is_a?(Pawn) && pawn_forward? &&
+      landing_square.occupied?
+  end
+
   # returns the square at position
   def square(position)
     square = Board.squares.select { |s| s.position == position }[0]
@@ -188,8 +243,9 @@ class Move
       landing_square.occupied_by.color != player.color
   end
 
+  # why do i get an error on this sometimes?
   def players_piece?
-    piece.color == player.color
+    @piece.color == @player.color
   end
 
   def player_input
