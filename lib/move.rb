@@ -2,8 +2,6 @@
 
 # handles the behavior of a move made by player
 class Move
-  # include Castling
-
   attr_reader :player, :move, :piece, :landing_square, :opponent
 
   def initialize(player, opponent)
@@ -56,53 +54,45 @@ class Move
       return
     end
 
-    error = evaluate_move
+    error = evaluate
     return unless error
 
-    display_move_error(error)
+    Display.move_error(error)
     initiate
   end
 
-  def evaluate_move
-    return :wrong_color unless players_piece?
-    return :invalid_movement unless valid_movement?
-    return :obstructed_path unless path_clear?
-    return :occupied_landing unless unoccupied_landing?
-
-    if in_check?
-      return :in_check if puts_in_check?
-    elsif puts_in_check?
-      return :checks_self
-    end
-
-    return unless piece.is_a?(Pawn)
-
-    return :illegal_pawn if pawn_diagonal? && !pawn_capture?
-    return :blocked if blocked_forward?
-
-    # if castling then valid castling?
-    # if pawn then taking en-passant?
+  def general_error
+    { players_piece?: [:wrong_color, player.color.to_s.capitalize],
+      valid_movement?: [:invalid_movement, piece.class],
+      path_clear?: [:obstructed_path, landing_square.position],
+      unoccupied_landing?: :occupied_landing }
   end
 
-  def display_move_error(error)
-    case error
-    when :wrong_color
-      puts "=> Select a #{player.color.to_s.capitalize} piece to move."
-    when :occupied_landing
-      puts "=> You already occupy the square you're trying to move to."
-    when :obstructed_path
-      puts "=> The path to #{landing_square.position} is obstructed."
-    when :invalid_movement
-      puts "=> Might be time to review how a #{piece.class} moves."
-    when :illegal_pawn
-      puts '=> Your pawn cannot move diagonally without capturing.'
-    when :in_check
-      puts '=> Your King is in check. You must move or guard him.'
-    when :checks_self
-      puts '=> That move is illegal, it puts your King in check.'
-    when :blocked
-      puts '=> Your pawn is blocked.'
+  def check_error
+    if in_check? && puts_in_check?
+      :in_check
+    elsif puts_in_check?
+      :checks_self
     end
+  end
+
+  def pawn_error
+    if pawn_diagonal? && !pawn_capture?
+      :illegal_pawn
+    elsif blocked_forward?
+      :blocked
+    end
+  end
+
+  def evaluate
+    general_error.each do |method, response|
+      conditions_pass = send(method)
+      return response unless conditions_pass
+    end
+    return check_error unless check_error.nil?
+    return nil unless piece.is_a?(Pawn)
+
+    pawn_error
   end
 
   def pawn_en_passant

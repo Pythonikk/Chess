@@ -5,6 +5,22 @@ require 'colorized_string'
 
 # handles what gets printed in the terminal
 class Display
+  extend MoveError
+
+  def self.instructions
+    puts 'When prompted to move, enter the square you wish to move from'\
+    " and the square you wish to move to. Like so: f2 f4\n"
+  end
+
+  def self.move_error(error)
+    if error.is_a?(Array)
+      puts send(error[0], error[1])
+    else
+      puts send(error)
+    end
+  end
+
+
   def self.output
     puts "\n"
 

@@ -16,6 +16,7 @@ class Game
     @board = Board.new
     @player1 = Player.new(:white)
     @player2 = Player.new(:black)
+    Display.instructions
     Display.output
     play
   end
