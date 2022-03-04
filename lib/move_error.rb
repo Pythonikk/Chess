@@ -1,36 +1,45 @@
 # frozen_string_literal: true
 
-# to be included in a Display class
+# player errors
+# to be included in Move class
 module MoveError
-  def wrong_color(player_color)
-    "=> Select a #{player_color} piece to move."
+  def general_error
+    { players_piece?: [:wrong_color, player.color.to_s.capitalize],
+      valid_movement?: [:invalid_movement, piece.class],
+      path_clear?: [:obstructed_path, landing.pos],
+      unoccupied_landing?: :occupied_landing }
   end
 
-  def occupied_landing
-    "=> You already occupy the square you're trying to move to."
+  def check_error
+    if in_check? && puts_in_check?
+      :in_check
+    elsif puts_in_check?
+      :checks_self
+    end
   end
 
-  def obstructed_path(end_position)
-    "=> The path to #{end_position} is obstructed."
+  def pawn_error
+    if pawn_diagonal? && !pawn_capture?
+      :illegal_pawn
+    elsif blocked_forward?
+      :blocked
+    end
   end
 
-  def invalid_movement(piece_class)
-    "=> Might be time to review how a #{piece_class} moves."
+  def players_piece?
+    @piece.color == @player.color
   end
 
-  def illegal_pawn
-    '=> Your pawn cannot move diagonally without capturing.'
+  def valid_movement?
+    piece.moves.any? { |m| m.include?(landing.pos) }
   end
 
-  def in_check
-    '=> Your King is in check. You must move or guard him.'
-  end
+  def path_clear?
+    path.each do |pos|
+      next if pos == landing.pos
 
-  def checks_self
-    '=> That move is illegal, it puts your King in check.'
-  end
-
-  def blocked
-    '=> Your pawn is blocked.'
+      return false unless square(pos).occupied_by.nil?
+    end
+    true
   end
 end

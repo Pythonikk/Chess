@@ -82,7 +82,7 @@ class Pawn < Piece
   end
 
   def square(position)
-    Board.squares.select { |s| s.position == position }[0]
+    Board.squares.select { |s| s.pos == position }[0]
   end
 
   def neighbor

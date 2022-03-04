@@ -23,10 +23,12 @@ class Game
 
   def play
     until Game.mate
+      puts "White's turn!"
       Move.new(player1, player2)
       Display.output
       break if Game.mate
 
+      puts "Black's turn!"
       Move.new(player2, player1)
       Display.output
     end

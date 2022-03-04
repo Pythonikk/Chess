@@ -26,7 +26,7 @@ module Pieces
   end
 
   def self.settle_in(piece)
-    square = Board.squares.select { |s| s.position == piece.current_pos }[0]
+    square = Board.squares.select { |s| s.pos == piece.current_pos }[0]
     square.occupied_by = piece
   end
 end

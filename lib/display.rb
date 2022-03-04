@@ -5,7 +5,7 @@ require 'colorized_string'
 
 # handles what gets printed in the terminal
 class Display
-  extend MoveError
+  extend DisplayError
 
   def self.instructions
     puts 'When prompted to move, enter the square you wish to move from'\
@@ -20,10 +20,8 @@ class Display
     end
   end
 
-
   def self.output
     puts "\n"
-
     display_graveyard(:black)
     puts "\n"
     print_column_letters
@@ -66,7 +64,7 @@ class Display
 
   def self.print_row(row)
     print "#{row} "
-    in_row = Board.squares.select { |s| s.position[1].to_i == row }
+    in_row = Board.squares.select { |s| s.pos[1].to_i == row }
     in_row.each do |square|
       if square.color == :white
         print white_square(square)

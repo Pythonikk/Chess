@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'game'
 require_relative 'move_error'
+require_relative 'display_error'
 require_relative 'display'
 require_relative 'pieces'
 require_relative 'player'
