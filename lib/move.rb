@@ -40,6 +40,23 @@ class Move
     pawn_error
   end
 
+  def path(piece = @piece, position = landing.pos)
+    way = piece.moves
+               .select { |array| array.include?(position) }
+               .flatten
+    index = way.find_index(position)
+    way[0..index]
+  end
+
+  def move_gives_check?
+    player.pieces.each do |pp|
+      next unless pp.moves.any? { |m| m.include?(opponent.king_pos) }
+
+      return true if path_clear?(pp, opponent.king_pos)
+    end
+    false
+  end
+
   def update_state
     capture if capture?
     piece.current_pos = landing.pos
@@ -62,13 +79,9 @@ class Move
     player.pieces.reject! { |pi| pi == piece }
   end
 
-  def mated?
-    opponent.graveyard.any? { |piece| piece.is_a?(King) }
-  end
-
-  def mate
-    Game.mate = true
-    puts "*** #{player.color.capitalize} wins! ***"
+  def passant_move?
+    piece.is_a?(Pawn) &&
+      piece.taking_en_passant?(landing.pos)
   end
 
   def pawn_en_passant
@@ -99,50 +112,9 @@ class Move
     puts "*** #{opponent.color.capitalize} is in check ***"
   end
 
-  def move_gives_check?
-    player.pieces.each do |pp|
-      next unless pp.moves.any? { |m| m.include?(opponent.king_pos) }
-
-      # return true unless path_required?(pp, opponent.king_pos)
-
-      path(pp, opponent.king_pos).each do |pos|
-        next unless square(pos).occupied_by.nil?
-
-        return true
-      end
-    end
-    false
-  end
-
-  def puts_in_check?(king_pos = player.king_pos)
-    king_pos = landing.pos if piece.is_a?(King)
-
-    opponent.pieces.each do |op|
-      next unless op.moves.any? { |m| m.include?(king_pos) }
-
-      # return true unless path_required?(op, king_pos)
-
-      path(op, king_pos).each do |pos|
-        next unless square(pos).occupied_by.nil?
-
-        return true
-      end
-    end
-    false
-  end
-
-  # path only works for pieces moving more than one square away
-  def path(piece = @piece, position = landing.pos)
-    way = piece.moves
-               .select { |array| array.include?(position) }
-               .flatten
-    index = way.find_index(position)
-    # the landing square could be a capture so don't count it in path
-    way[0..(index - 1)]
-  end
-
   def capture?
-    landing.occupied?
+    landing.occupied? &&
+      landing.occupied_by.color != player.color
   end
 
   def capture
@@ -150,25 +122,13 @@ class Move
     opponent.pieces.reject! { |piece| piece == landing.occupied_by }
   end
 
-  def pawn_diagonal?
-    piece.is_a?(Pawn) &&
-      landing.pos[0] != piece.current_pos[0]
+  def mated?
+    opponent.graveyard.any? { |piece| piece.is_a?(King) }
   end
 
-  def pawn_capture?
-    return true if landing.occupied?
-
-    false
-  end
-
-  def pawn_forward?
-    true unless pawn_diagonal?
-  end
-
-  # for pawns
-  def blocked_forward?
-    piece.is_a?(Pawn) && pawn_forward? &&
-      landing.occupied?
+  def mate
+    Game.mate = true
+    puts "*** #{player.color.capitalize} wins! ***"
   end
 
   # returns the square at position
@@ -177,16 +137,6 @@ class Move
     return square if square
 
     puts 'An invalid square was entered'
-  end
-
-  def unoccupied_landing?
-    landing.occupied_by.nil? ||
-      landing.occupied_by.color != player.color
-  end
-
-  def passant_move?
-    piece.is_a?(Pawn) &&
-      piece.taking_en_passant?(landing.pos)
   end
 
   def player_input
