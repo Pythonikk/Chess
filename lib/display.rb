@@ -23,14 +23,15 @@ class Display
   def self.promotion
     puts 'Your pawn has been promoted! Select a promotion: '
     puts Pawn::PROMOTIONS.to_s
-    loop do
-      input = gets.chomp.to_i
-      if Pawn::PROMOTIONS.keys.include?(input)
-        return Pawn::PROMOTIONS[input]
-      else
-        puts 'Invalid input. Choose 1, 2, 3 or 4.'
-      end
-    end
+    selection
+  end
+
+  def self.selection
+    input = gets.chomp.to_i
+    return Pawn::PROMOTIONS[input] if Pawn::PROMOTIONS.keys.include?(input)
+
+    puts 'Invalid input. Choose 1, 2, 3 or 4.'
+    Display.selection
   end
 
   def self.output
@@ -38,14 +39,36 @@ class Display
     display_graveyard(:black)
     puts "\n"
     print_column_letters
+    print_board
+    print_column_letters
+    display_graveyard(:white)
+    puts "\n"
+  end
+
+  def self.print_board
     row = 8
     until row.zero?
       print_row(row)
       row -= 1
     end
-    print_column_letters
-    display_graveyard(:white)
+  end
+
+  def self.print_row(row)
+    print "#{row} "
+    in_row = Board.squares.select { |s| s.pos[1].to_i == row }
+    print_squares(in_row)
+    print " #{row}"
     puts "\n"
+  end
+
+  def self.print_squares(in_row)
+    in_row.each do |square|
+      if square.color == :white
+        print white_square(square)
+      else
+        print black_square(square)
+      end
+    end
   end
 
   def self.display_graveyard(color)
@@ -53,7 +76,6 @@ class Display
     graveyard(color).map { |p| Pieces::SYMBOL[p.class.to_s.downcase.to_sym] }
                     .each { |g| print g.to_s.colorize(color: color) }
   end
-
 
   def self.graveyard(color)
     ObjectSpace.each_object(Player).to_a
@@ -66,26 +88,11 @@ class Display
   end
 
   def self.print_column_letters
-    columns = %w[a b c d e f g h]
     i = 0
     until i == 8
-      print "   #{columns[i]}"
+      print "   #{Board::COLUMNS[i]}"
       i += 1
     end
-    puts "\n"
-  end
-
-  def self.print_row(row)
-    print "#{row} "
-    in_row = Board.squares.select { |s| s.pos[1].to_i == row }
-    in_row.each do |square|
-      if square.color == :white
-        print white_square(square)
-      else
-        print black_square(square)
-      end
-    end
-    print " #{row}"
     puts "\n"
   end
 

@@ -2,6 +2,8 @@
 
 # abstract superclass
 class Piece
+  include Movement
+
   attr_reader :color, :start_pos, :cp1, :cp2, :squares
   attr_accessor :current_pos
 

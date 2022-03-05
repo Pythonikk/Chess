@@ -16,17 +16,4 @@ class Bishop < Piece
 
     format_squares
   end
-
-  def diagonal(limit, c_alter, r_alter)
-    arr = []
-    column = cp1
-    row = cp2
-
-    until column == limit[:column] || row == limit[:row]
-      column = Board.column(column, c_alter)
-      row += r_alter
-      arr << [column, row]
-    end
-    arr unless arr.empty?
-  end
 end

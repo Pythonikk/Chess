@@ -17,8 +17,4 @@ class King < Piece
 
     format_squares
   end
-
-  # def format_squares
-  #   super.reject! { |i| i == current_pos }
-  # end
 end
