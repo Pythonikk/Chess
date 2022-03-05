@@ -20,6 +20,19 @@ class Display
     end
   end
 
+  def self.promotion
+    puts 'Your pawn has been promoted! Select a promotion: '
+    puts Pawn::PROMOTIONS.to_s
+    loop do
+      input = gets.chomp.to_i
+      if Pawn::PROMOTIONS.keys.include?(input)
+        return Pawn::PROMOTIONS[input]
+      else
+        puts 'Invalid input. Choose 1, 2, 3 or 4.'
+      end
+    end
+  end
+
   def self.output
     puts "\n"
     display_graveyard(:black)

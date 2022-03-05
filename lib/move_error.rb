@@ -59,8 +59,9 @@ module MoveError
 
   # path_clear? helper
   def square_clear(pos)
+    square = Square.find_by_pos(pos)
     # square's currently clear or will be if move succeeds.
-    square(pos).occupied_by.nil? || square(pos).occupied_by == @piece
+    square.occupied_by.nil? || square.occupied_by == @piece
   end
 
   def unoccupied_landing?

@@ -7,53 +7,36 @@ class Pawn < Piece
   def moves
     reset_moves
     squares << forward_move
-    squares << starting_move if first_turn
+    squares << double_step if first_turn
     squares << capture_moves
     format_squares
   end
+
+  PROMOTIONS = { 1 => :queen, 2 => :bishop, 3 => :rook, 4 => :knight }.freeze
 
   def promotion?
     h = { white: '8', black: '1' }
     h[color] == current_pos[1]
   end
 
-  def promote_options
-    { 1 => :queen, 2 => :bishop, 3 => :rook, 4 => :knight }
-  end
-
-  def promote
-    puts "Your pawn has been promoted! Select promotion: "
-    puts promote_options
-    input = gets.chomp.to_i
-    until promote_options.keys.include?(input)
-      puts "Invalid input. Choose 1, 2, 3, or 4."
-      input = gets.chomp.to_i
-    end
-    promote_options[input]
-  end
-
   def first_turn
     current_pos == start_pos
   end
 
-  def starting_move
-    arr = []
+  def double_step
     if color == :white
-      arr << [cp1, cp2 + 1] # one forward move
-      arr << [cp1, cp2 + 2]
+      [].push(forward_move).push([cp1, cp2 + 2])
     else
-      arr << [cp1, cp2 - 1] # one forward move
-      arr << [cp1, cp2 - 2]
+      [].push(forward_move).push([cp1, cp2 - 2])
     end
-    arr
   end
 
   def forward_move
     return [[cp1, cp2 + 1]] if color == :white
-    return [[cp1, cp2 - 1]] if color == :black
+
+    [[cp1, cp2 - 1]]
   end
 
-  # can move diagonally to capture
   def capture_moves
     right_column = Board.column(cp1, 1)
     left_column = Board.column(cp1, -1)
@@ -81,17 +64,20 @@ class Pawn < Piece
                                  square.occupied_by.color != color
   end
 
-  def square(position)
-    Board.squares.select { |s| s.pos == position }[0]
+  def adjacent
+    { north: [cp1, cp2 + 1],
+      east: [Board.column(cp1, 1), cp2],
+      south: [cp1, cp2 - 1],
+      west: [Board.column(cp1, -1), cp2] }
   end
 
   def neighbor
-    n = { north: [cp1, cp2 + 1],
-          east: [Board.column(cp1, 1), cp2],
-          south: [cp1, cp2 - 1],
-          west: [Board.column(cp1, -1), cp2] }
-
-    n.each { |k, v| n[k] = opponent_pawn(square(v.join('').to_sym)) }
+    abbreviate # resets cp1 and cp2
+    h = adjacent
+    h.each do |dir, pos|
+      sq = Square.find_by_pos(pos.join('').to_sym)
+      h[dir] = opponent_pawn(sq)
+    end
   end
 
   def give_en_passant
@@ -102,5 +88,27 @@ class Pawn < Piece
   def taking_en_passant?(new_pos)
     @en_passant == true &&
       new_pos[0] != current_pos[0]
+  end
+
+  def promote(player)
+    selection = Display.promotion
+    np = Pieces.give_character(selection, color, current_pos)
+    player.pieces << np
+    player.pieces.reject! { |pi| pi == self }
+  end
+
+  def take_en_passant(opponent, landing)
+    self.current_pos = landing.pos
+    self.en_passant = false
+
+    opponent.piece_taken(taking_pawn)
+    square = Square.find_by_occupant(taking_pawn)
+    square.update
+  end
+
+  def taking_pawn
+    return neighbor[:south] if color == :white
+
+    neighbor[:north]
   end
 end

@@ -9,18 +9,18 @@ class Move
     @player = player
     @opponent = opponent
     initiate
-    update_state
+    execute
   end
 
   def set_vars
     @move = player_input
-    @piece = square(move[0]).occupied_by
-    @landing = square(move[1])
+    @piece = Square.find_by_pos(move[0]).occupied_by
+    @landing = Square.find_by_pos(move[1])
   end
 
   def initiate
     set_vars
-    return pawn_en_passant if passant_move?
+    return piece.take_en_passant(opponent, landing) if passant_move?
 
     error = evaluate
     return unless error
@@ -57,46 +57,32 @@ class Move
     false
   end
 
-  def update_state
+  def execute
     capture if capture?
-    piece.current_pos = landing.pos
-    landing.occupied_by = piece
-    square(move[0]).occupied_by = nil
-
+    update_state
     return mate if mated?
 
     give_check if move_gives_check?
-    return unless piece.is_a?(Pawn)
-
-    piece.give_en_passant if piece.giving_en_passant?(move[0])
-    promote if piece.promotion?
+    pawn_privelage if piece.is_a?(Pawn)
   end
 
-  def promote
-    role = piece.promote
-    np = Pieces.give_character(role, player.color, piece.current_pos)
-    player.pieces << np
-    player.pieces.reject! { |pi| pi == piece }
+  def update_state
+    piece.current_pos = landing.pos
+    landing.occupied_by = piece
+    Square.find_by_pos(move[0]).update
+  end
+
+  def pawn_privelage
+    if piece.giving_en_passant?(move[0])
+      piece.give_en_passant
+    elsif piece.promotion?
+      piece.promote(player)
+    end
   end
 
   def passant_move?
     piece.is_a?(Pawn) &&
       piece.taking_en_passant?(landing.pos)
-  end
-
-  def pawn_en_passant
-    piece.current_pos = landing.pos
-    # using this to reset cp1 and cp2 for now
-    piece.abbreviate
-    piece.en_passant = false
-
-    taking_pawn = piece.neighbor[:south] if piece.color == :white
-    taking_pawn = piece.neighbor[:north] if piece.color == :black
-
-    opponent.graveyard << taking_pawn
-    opponent.pieces.reject! { |piece| piece == taking_pawn }
-    s = Board.squares.select { |sq| sq.occupied_by == taking_pawn }[0]
-    s.occupied_by = nil
   end
 
   def in_check?
@@ -118,8 +104,7 @@ class Move
   end
 
   def capture
-    opponent.graveyard << landing.occupied_by
-    opponent.pieces.reject! { |piece| piece == landing.occupied_by }
+    opponent.piece_taken(landing.occupied_by)
   end
 
   def mated?
@@ -131,14 +116,6 @@ class Move
     puts "*** #{player.color.capitalize} wins! ***"
   end
 
-  # returns the square at position
-  def square(position)
-    square = Board.squares.select { |s| s.pos == position }[0]
-    return square if square
-
-    puts 'An invalid square was entered'
-  end
-
   def player_input
     puts 'Move: '
     input = gets.chomp.split(' ').map(&:to_sym)
@@ -148,6 +125,7 @@ class Move
   end
 
   def valid?(input)
-    square(input[0]) && square(input[1])
+    Square.find_by_pos(input[0])
+    Square.find_by_pos(input[1])
   end
 end

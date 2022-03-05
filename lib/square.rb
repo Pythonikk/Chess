@@ -16,4 +16,19 @@ class Square
 
     false
   end
+
+  def update(piece = nil)
+    self.occupied_by = piece
+  end
+
+  def self.find_by_pos(position)
+    square = Board.squares.select { |s| s.pos == position }[0]
+    return square if square
+
+    puts 'An invalid square was entered'
+  end
+
+  def self.find_by_occupant(occupant)
+    Board.squares.select { |s| s.occupied_by == occupant }[0]
+  end
 end

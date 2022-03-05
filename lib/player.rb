@@ -15,6 +15,11 @@ class Player
     @in_check = false
   end
 
+  def piece_taken(piece)
+    graveyard << piece
+    pieces.reject! { |pi| pi == piece }
+  end
+
   def tokens
     return Pieces::WHITE if color == :white
 
