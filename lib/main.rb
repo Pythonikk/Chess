@@ -2,7 +2,7 @@
 
 require_relative 'game'
 require_relative 'movement'
-require_relative 'move_error'
+require_relative 'evaluator'
 require_relative 'display_error'
 require_relative 'display'
 require_relative 'pieces'

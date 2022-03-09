@@ -3,6 +3,10 @@
 # player errors to be printed in terminal
 # to extend Display class
 module DisplayError
+  def no_piece
+    "=> There isn't a piece to move on the selected square."
+  end
+
   def wrong_color(player_color)
     "=> Select a #{player_color} piece to move."
   end

@@ -2,7 +2,6 @@
 
 # handles the behavior of a move made by player
 class Move
-  include MoveError
   attr_reader :player, :move, :piece, :landing, :opponent
 
   def initialize(player, opponent)
@@ -22,37 +21,19 @@ class Move
     set_vars
     return piece.take_en_passant(opponent, landing) if passant_move?
 
-    error = evaluate
+    @evaluator = Evaluator.new(player, opponent, piece, landing)
+    error = @evaluator.error
     return unless error
 
     Display.move_error(error)
     initiate
   end
 
-  def evaluate
-    general_error.each do |method, response|
-      conditions_pass = send(method)
-      return response unless conditions_pass
-    end
-    return check_error unless check_error.nil?
-    return nil unless piece.is_a?(Pawn)
-
-    pawn_error
-  end
-
-  def path(piece = @piece, position = landing.pos)
-    way = piece.moves
-               .select { |array| array.include?(position) }
-               .flatten
-    index = way.find_index(position)
-    way[0..index]
-  end
-
   def move_gives_check?
     player.pieces.each do |pp|
       next unless pp.moves.any? { |m| m.include?(opponent.king_pos) }
 
-      return true if path_clear?(pp, opponent.king_pos)
+      return true if @evaluator.path_clear?(pp, opponent.king_pos)
     end
     false
   end
@@ -83,10 +64,6 @@ class Move
   def passant_move?
     piece.is_a?(Pawn) &&
       piece.taking_en_passant?(landing.pos)
-  end
-
-  def in_check?
-    player.in_check == true
   end
 
   def remove_check
@@ -125,7 +102,7 @@ class Move
   end
 
   def valid?(input)
-    Square.find_by_pos(input[0])
-    Square.find_by_pos(input[1])
+    Square.find_by_pos(input[0]) &&
+      Square.find_by_pos(input[1])
   end
 end
