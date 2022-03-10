@@ -24,6 +24,8 @@ class Board
     COLUMNS[index + alter]
   end
 
+  private
+
   def create(pos = ['a', 8], color = :white)
     return if pos == ['a', 0]
 

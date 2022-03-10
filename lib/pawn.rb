@@ -23,6 +23,46 @@ class Pawn < Piece
     current_pos == start_pos
   end
 
+  def double_step?(old_pos)
+    row = old_pos[1].to_i
+    [row + 2, row - 2].include?(cp2)
+  end
+
+  # has moved forward two and landed next to an enemy pawn
+  def giving_en_passant?(old_pos)
+    return unless double_step?(old_pos)
+
+    neighbor[:east] || neighbor[:west]
+  end
+
+  def promote(player)
+    selection = Display.promotion
+    np = Pieces.give_character(selection, color, current_pos)
+    player.pieces << np
+    player.pieces.reject! { |pi| pi == self }
+  end
+
+  def take_en_passant(opponent, landing)
+    self.current_pos = landing.pos
+    self.en_passant = false
+
+    opponent.piece_taken(taking_pawn)
+    square = Square.find_by_occupant(taking_pawn)
+    square.update
+  end
+
+  def taking_en_passant?(new_pos)
+    @en_passant == true &&
+      new_pos[0] != current_pos[0]
+  end
+
+  def give_en_passant
+    pawn = neighbor[:east] || neighbor[:west]
+    pawn.en_passant = true
+  end
+
+  private
+
   def double_step
     if color == :white
       [].push(forward_move).push([cp1, cp2 + 2])
@@ -43,18 +83,6 @@ class Pawn < Piece
 
     return [[right_column, cp2 + 1], [left_column, cp2 + 1]] if color == :white
     return [[right_column, cp2 - 1], [left_column, cp2 - 1]] if color == :black
-  end
-
-  def double_step?(old_pos)
-    row = old_pos[1].to_i
-    [row + 2, row - 2].include?(cp2)
-  end
-
-  # has moved forward two and landed next to an enemy pawn
-  def giving_en_passant?(old_pos)
-    return unless double_step?(old_pos)
-
-    neighbor[:east] || neighbor[:west]
   end
 
   def opponent_pawn(square)
@@ -78,32 +106,6 @@ class Pawn < Piece
       sq = Square.find_by_pos(pos.join('').to_sym)
       h[dir] = opponent_pawn(sq)
     end
-  end
-
-  def give_en_passant
-    pawn = neighbor[:east] || neighbor[:west]
-    pawn.en_passant = true
-  end
-
-  def taking_en_passant?(new_pos)
-    @en_passant == true &&
-      new_pos[0] != current_pos[0]
-  end
-
-  def promote(player)
-    selection = Display.promotion
-    np = Pieces.give_character(selection, color, current_pos)
-    player.pieces << np
-    player.pieces.reject! { |pi| pi == self }
-  end
-
-  def take_en_passant(opponent, landing)
-    self.current_pos = landing.pos
-    self.en_passant = false
-
-    opponent.piece_taken(taking_pawn)
-    square = Square.find_by_occupant(taking_pawn)
-    square.update
   end
 
   def taking_pawn

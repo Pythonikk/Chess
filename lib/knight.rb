@@ -13,6 +13,8 @@ class Knight < Piece
     format_squares
   end
 
+  private
+
   def alterations
     [[1, 2], [2, 1], [2, -1], [1, -2],
      [-1, -2], [-2, -1], [-2, 1], [-1, 2]]

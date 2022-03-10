@@ -3,6 +3,8 @@
 # defines types of movement that some pieces share/
 # to be included in Piece class.
 module Movement
+  private
+
   # bishop and queen
   def diagonal(limit, c_alter, r_alter)
     arr = []

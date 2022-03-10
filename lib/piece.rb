@@ -19,6 +19,8 @@ class Piece
     abbreviate
   end
 
+  private
+
   def moves
     raise NotImplementedError, "#moves for instance of #{self.class}..."
   end

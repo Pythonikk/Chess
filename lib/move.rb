@@ -11,6 +11,8 @@ class Move
     execute
   end
 
+  private
+
   def set_vars
     @move = player_input
     @piece = Square.find_by_pos(move[0]).occupied_by
@@ -72,7 +74,7 @@ class Move
 
   def give_check
     opponent.in_check = true
-    puts "*** #{opponent.color.capitalize} is in check ***"
+    Display.in_check(opponent)
   end
 
   def capture?
@@ -90,11 +92,11 @@ class Move
 
   def mate
     Game.mate = true
-    puts "*** #{player.color.capitalize} wins! ***"
+    Display.mate(player)
   end
 
   def player_input
-    puts 'Move: '
+    Display.move
     input = gets.chomp.split(' ').map(&:to_sym)
     return input if valid?(input)
 

@@ -26,6 +26,16 @@ class Player
     Pieces::BLACK
   end
 
+  def king_pos
+    king = Pieces.all.select do |piece|
+      piece.is_a?(King) &&
+        piece.color == color
+    end
+    king[0].current_pos
+  end
+
+  private
+
   def set_up_pieces
     tokens.each_pair do |type, pos|
       if pos.is_a?(Array)
@@ -36,13 +46,5 @@ class Player
         Pieces.give_character(type, color, pos)
       end
     end
-  end
-
-  def king_pos
-    king = Pieces.all.select do |piece|
-      piece.is_a?(King) &&
-        piece.color == color
-    end
-    king[0].current_pos
   end
 end

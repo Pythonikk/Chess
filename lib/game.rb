@@ -21,6 +21,8 @@ class Game
     play
   end
 
+  private
+
   def play
     until Game.mate
       puts "White's turn!"
