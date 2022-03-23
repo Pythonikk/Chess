@@ -7,7 +7,7 @@ class Pawn < Piece
   def moves
     reset_moves
     squares << forward_move
-    squares << double_step if first_turn
+    squares << double_step if first_move?
     squares << capture_moves
     format_squares
   end
@@ -19,7 +19,7 @@ class Pawn < Piece
     h[color] == current_pos[1]
   end
 
-  def first_turn
+  def first_move?
     current_pos == start_pos
   end
 

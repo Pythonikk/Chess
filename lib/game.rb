@@ -34,8 +34,6 @@ class Game
       puts "Black's turn!"
       Move.new(player2, player1)
       Display.output
-
-      puts Game.scoresheet
     end
   end
 end

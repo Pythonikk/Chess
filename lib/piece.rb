@@ -14,12 +14,16 @@ class Piece
     abbreviate
   end
 
+  def first_move?
+    Game.scoresheet.none? { |move| move[:piece] == self }
+  end
+
+  private
+
   def reset_moves
     @squares = []
     abbreviate
   end
-
-  private
 
   def moves
     raise NotImplementedError, "#moves for instance of #{self.class}..."
