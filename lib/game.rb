@@ -5,10 +5,11 @@ require 'pry-byebug'
 # controls the course of the game
 class Game
   class << self
-    attr_accessor :mate, :stalemate
+    attr_accessor :mate, :scoresheet
   end
 
   @mate = false
+  @scoresheet = []
 
   attr_reader :board, :player1, :player2
 
@@ -33,6 +34,8 @@ class Game
       puts "Black's turn!"
       Move.new(player2, player1)
       Display.output
+
+      puts Game.scoresheet
     end
   end
 end

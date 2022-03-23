@@ -42,11 +42,17 @@ class Move
 
   def execute
     capture if capture?
+    update_scoresheet
     update_state
     return mate if mated?
 
     give_check if move_gives_check?
     pawn_privelage if piece.is_a?(Pawn)
+  end
+
+  def update_scoresheet
+    Game.scoresheet << { piece: piece, from: piece.current_pos,
+                         to: landing.pos }
   end
 
   def update_state
