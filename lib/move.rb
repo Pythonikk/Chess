@@ -2,7 +2,7 @@
 
 # handles the behavior of a move made by player
 class Move
-  attr_reader :player, :move, :piece, :landing, :opponent
+  attr_reader :player, :move, :piece, :landing, :opponent, :castling
 
   def initialize(player, opponent)
     @player = player
@@ -17,13 +17,14 @@ class Move
     @move = player_input
     @piece = Square.find_by_pos(move[0]).occupied_by
     @landing = Square.find_by_pos(move[1])
+    @castling = castling?
   end
 
   def initiate
     set_vars
     return piece.take_en_passant(opponent, landing) if passant_move?
 
-    @evaluator = Evaluator.new(player, opponent, piece, landing)
+    @evaluator = Evaluator.new(self)
     error = @evaluator.error
     return unless error
 
@@ -32,15 +33,14 @@ class Move
   end
 
   def castling?
-    @castler = Castler.new(piece, player, opponent)
-    # if its an attempt and we got here, we know its a valid attempt.
-    castler.attempt?
+    @castler = Castler.new(piece, player, opponent, landing)
+    @castler.attempt?
   end
 
   def update_state_rook
-    Square.find_by_pos(rook.current_pos).update
-    Square.find_by_pos(castler.rook_moves).occupied_by = rook
-    castler.rook.current_pos = castler.rook_moves
+    Square.find_by_pos(@castler.rook.current_pos).update
+    @castler.rook_square.occupied_by = @castler.rook
+    @castler.rook.current_pos = @castler.rook_square.pos
   end
 
   def move_gives_check?
@@ -56,7 +56,7 @@ class Move
     capture if capture?
     update_scoresheet
     update_state
-    update_state_rook if castling?
+    update_state_rook if castling
     return mate if mated?
 
     give_check if move_gives_check?
@@ -116,7 +116,7 @@ class Move
 
   def player_input
     Display.move
-    input = gets.chomp.split(' ').map(&:to_sym)
+    input = gets.chomp.downcase.split(' ').map(&:to_sym)
     return input if valid?(input)
 
     player_input

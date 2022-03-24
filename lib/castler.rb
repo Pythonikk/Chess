@@ -2,17 +2,18 @@
 
 # defines the behavior of a castling move between the rook and king
 class Castler
-  attr_reader :evaluator, :piece, :player, :opponent, :direction, :rook
+  attr_reader :piece, :player, :opponent, :direction, :rook, :landing
 
-  def initialize(piece, player, opponent)
+  def initialize(piece, player, opponent, landing)
     @piece = piece
     @player = player
     @opponent = opponent
+    @landing = landing
     @direction = find_direction
     @rook = find_rook
   end
 
-  def rook_moves
+  def rook_square
     col = if direction == :queenside
             # rook moves three squares to the right
             Board.column(rook.current_pos[0], 3)
@@ -26,11 +27,10 @@ class Castler
   end
 
   def find_direction
-    if Board.COLUMNS.index(piece.current_pos[0]) <
-       Board.COLUMNS.index(landing.pos[0])
-      :queenside
-    else
+    if Board::COLUMNS.index(piece.current_pos[0]) < Board::COLUMNS.index(landing.pos[0])
       :kingside
+    else
+      :queenside
     end
   end
 
@@ -53,7 +53,10 @@ class Castler
   end
 
   def jumped_square_under_attack?
-    opponent.pieces.moves.any? { |m| m == square_jumped.pos }
+    opponent.pieces.each do |piece|
+      return true if piece.moves.any? { |m| m == square_jumped.pos }
+    end
+    false
   end
 
   def rook_in_position?
@@ -61,8 +64,8 @@ class Castler
   end
 
   def attempt?
-    piece.is_a?(King) && moving_two_squares?
-    rook_in_position?
+    piece.is_a?(King) && moving_two_squares? &&
+      rook_in_position?
   end
 
   # def valid_castling?

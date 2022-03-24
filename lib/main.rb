@@ -17,5 +17,6 @@ require_relative 'queen'
 require_relative 'knight'
 require_relative 'rook'
 require_relative 'move'
+require_relative 'castler'
 
 Game.new

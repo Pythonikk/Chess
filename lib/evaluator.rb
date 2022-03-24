@@ -2,17 +2,19 @@
 
 # evaluates the move the player is trying to make
 class Evaluator
-  attr_reader :player, :opponent, :piece, :landing
+  attr_reader :player, :opponent, :piece, :landing, :castling
 
-  def initialize(player, opponent, piece, landing)
-    @player = player
-    @opponent = opponent
-    @piece = piece
-    @landing = landing
+  def initialize(move)
+    @player = move.player
+    @opponent = move.opponent
+    @piece = move.piece
+    @landing = move.landing
+    @castling = move.castling
   end
 
   def error
-    return castling_error unless castling_error.nil?
+    return castling_error if castling && castling_error
+    return if castling
 
     general_error.each do |method, response|
       conditions_pass = send(method)
@@ -62,15 +64,15 @@ class Evaluator
   end
 
   def castling_error
-    castler = Castler.new(piece, player, opponent)
+    castler = Castler.new(piece, player, opponent, landing)
     return unless castler.attempt?
 
     return :kings_moved unless piece.first_move?
     return :rooks_moved unless castler.rook.first_move?
     return [:obstructed_path, landing.pos] unless path_clear?(piece, castler.rook.current_pos)
-    return :castling_in_check if piece.in_check == true
+    return :castling_in_check if player.in_check == true
     return :checks_self if puts_in_check?
-    return :illegal_jump if castler.jumped_square_under_attack
+    return :illegal_jump if castler.jumped_square_under_attack?
   end
 
   def pawn_diagonal?
