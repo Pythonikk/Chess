@@ -9,6 +9,8 @@ class Castler
     @player = player
     @opponent = opponent
     @landing = landing
+    return unless attempt?
+
     @direction = find_direction
     @rook = find_rook
   end
@@ -39,11 +41,11 @@ class Castler
   end
 
   def queenside_rook
-    Pieces.all.select { |p| p.is_a?(Rook) && p.start_pos[0] == 'a' }[0]
+    player.pieces.select { |p| p.is_a?(Rook) && p.start_pos[0] == 'a' }[0]
   end
 
   def kingside_rook
-    Pieces.all.select { |p| p.is_a?(Rook) && p.start_pos[0] == 'h' }[0]
+    player.pieces.select { |p| p.is_a?(Rook) && p.start_pos[0] == 'h' }[0]
   end
 
   def square_jumped

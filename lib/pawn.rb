@@ -8,7 +8,8 @@ class Pawn < Piece
     reset_moves
     squares << forward_move
     squares << double_step if first_move?
-    squares << capture_moves
+    squares << capture_move_left
+    squares << capture_move_right
     format_squares
   end
 
@@ -77,12 +78,26 @@ class Pawn < Piece
     [[cp1, cp2 - 1]]
   end
 
-  def capture_moves
-    right_column = Board.column(cp1, 1)
+  # def capture_move
+  #   right_column = Board.column(cp1, 1)
+  #   left_column = Board.column(cp1, -1)
+
+  #   return [[right_column, cp2 + 1], [left_column, cp2 + 1]] if color == :white
+  #   return [[right_column, cp2 - 1], [left_column, cp2 - 1]] if color == :black
+  # end
+
+  def capture_move_left
     left_column = Board.column(cp1, -1)
 
-    return [[right_column, cp2 + 1], [left_column, cp2 + 1]] if color == :white
-    return [[right_column, cp2 - 1], [left_column, cp2 - 1]] if color == :black
+    return [[left_column, cp2 + 1]] if color == :white
+    return [[left_column, cp2 - 1]] if color == :black
+  end
+
+  def capture_move_right
+    right_column = Board.column(cp1, 1)
+
+    return [[right_column, cp2 + 1]] if color == :white
+    return [[right_column, cp2 - 1]] if color == :black
   end
 
   def opponent_pawn(square)

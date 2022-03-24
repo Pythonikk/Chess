@@ -13,13 +13,10 @@ class Evaluator
   end
 
   def error
+    return elemental_error unless elemental_error.nil?
     return castling_error if castling && castling_error
     return if castling
-
-    general_error.each do |method, response|
-      conditions_pass = send(method)
-      return response unless conditions_pass
-    end
+    return general_error unless general_error.nil?
     return check_error unless check_error.nil?
     return nil unless piece.is_a?(Pawn)
 
@@ -37,12 +34,15 @@ class Evaluator
 
   private
 
+  def elemental_error
+    return :no_piece unless piece?
+    return [:wrong_color, player.color.to_s.capitalize] unless players_piece?
+  end
+
   def general_error
-    { piece?: :no_piece,
-      players_piece?: [:wrong_color, player.color.to_s.capitalize],
-      valid_movement?: [:invalid_movement, piece.class],
-      path_clear?: [:obstructed_path, landing.pos],
-      unoccupied_landing?: :occupied_landing }
+    return [:invalid_movement, piece.class] unless valid_movement?
+    return [:obstructed_path, landing.pos] unless path_clear?
+    return :occupied_landing unless unoccupied_landing?
   end
 
   def check_error
@@ -76,7 +76,8 @@ class Evaluator
   end
 
   def pawn_diagonal?
-    landing.pos[0] != piece.current_pos[0]
+    piece.is_a?(Pawn) &&
+      landing.pos[0] != piece.current_pos[0]
   end
 
   def pawn_capture?
