@@ -12,6 +12,8 @@ class Evaluator
   end
 
   def error
+    return castling_error unless castling_error.nil?
+
     general_error.each do |method, response|
       conditions_pass = send(method)
       return response unless conditions_pass
@@ -57,6 +59,18 @@ class Evaluator
     elsif pawn_blocked?
       :blocked
     end
+  end
+
+  def castling_error
+    castler = Castler.new(piece, player, opponent)
+    return unless castler.attempt?
+
+    return :kings_moved unless piece.first_move?
+    return :rooks_moved unless castler.rook.first_move?
+    return [:obstructed_path, landing.pos] unless path_clear?(piece, castler.rook.current_pos)
+    return :castling_in_check if piece.in_check == true
+    return :checks_self if puts_in_check?
+    return :illegal_jump if castler.jumped_square_under_attack
   end
 
   def pawn_diagonal?

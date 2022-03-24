@@ -31,6 +31,18 @@ class Move
     initiate
   end
 
+  def castling?
+    @castler = Castler.new(piece, player, opponent)
+    # if its an attempt and we got here, we know its a valid attempt.
+    castler.attempt?
+  end
+
+  def update_state_rook
+    Square.find_by_pos(rook.current_pos).update
+    Square.find_by_pos(castler.rook_moves).occupied_by = rook
+    castler.rook.current_pos = castler.rook_moves
+  end
+
   def move_gives_check?
     player.pieces.each do |pp|
       next unless pp.moves.any? { |m| m.include?(opponent.king_pos) }
@@ -44,6 +56,7 @@ class Move
     capture if capture?
     update_scoresheet
     update_state
+    update_state_rook if castling?
     return mate if mated?
 
     give_check if move_gives_check?

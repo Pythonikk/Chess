@@ -38,4 +38,20 @@ module DisplayError
   def blocked
     '=> Your pawn is blocked.'
   end
+
+  def kings_moved
+    '=> You cannot castle with a king that has already moved.'
+  end
+
+  def rooks_moved
+    '=> You cannot castle with a rook that has already moved.'
+  end
+
+  def castling_in_check
+    '=> You cannot castle while your king is in check'
+  end
+
+  def illegal_jump
+    '=> Illegal castling: you cannot jump over a square under attack.'
+  end
 end

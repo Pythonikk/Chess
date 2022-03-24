@@ -4,13 +4,25 @@
 class Castler
   attr_reader :evaluator, :piece, :player, :opponent, :direction, :rook
 
-  def initialize(evaluator, piece, player, opponent)
-    @evaluator = evaluator
+  def initialize(piece, player, opponent)
     @piece = piece
     @player = player
     @opponent = opponent
     @direction = find_direction
     @rook = find_rook
+  end
+
+  def rook_moves
+    col = if direction == :queenside
+            # rook moves three squares to the right
+            Board.column(rook.current_pos[0], 3)
+          else
+            # rook moves two squares to the left
+            Board.column(rook.current_pos[0], -2)
+          end
+
+    pos = (col + rook.current_pos[1]).to_sym
+    Square.find_by_pos(pos)
   end
 
   def find_direction
@@ -48,18 +60,18 @@ class Castler
     player.pieces.include?(rook) && rook.current_pos == rook.start_pos
   end
 
-  def attempting_to_castle?
+  def attempt?
     piece.is_a?(King) && moving_two_squares?
     rook_in_position?
   end
 
-  def valid_castling?
-    piece.first_move? && rook.first_move? &&
-      evaluator.path_clear?(piece, rook.current_pos) &&
-      piece.in_check == false &&
-      !@evaluator.puts_in_check? &&
-      !jumped_square_under_attack?
-  end
+  # def valid_castling?
+  #   piece.first_move? && rook.first_move? &&
+  #     evaluator.path_clear?(piece, rook.current_pos) &&
+  #     piece.in_check == false &&
+  #     !@evaluator.puts_in_check? &&
+  #     !jumped_square_under_attack?
+  # end
 
   def moving_two_squares?
     return false unless within_row?
