@@ -7,9 +7,13 @@ require 'colorized_string'
 class Display
   extend DisplayError
 
+  def self.select_game
+    puts 'Select game: [0]New Game  [1]Load Game'
+  end
+
   def self.instructions
     puts 'When prompted to move, enter the square you wish to move from'\
-    " and the square you wish to move to. Like so: f2 f4\n"
+    " and the square you wish to move to. Like so: f2 f4\n Enter 'save' to save the game.\n"
   end
 
   def self.move_error(error)
