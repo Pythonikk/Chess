@@ -1,8 +1,8 @@
-## Chess
+# Chess
 
 A command line Chess game where two players can play against each other. This was my final project for [The Odin Project's](https://www.theodinproject.com) Ruby section.
 
-# Usage
+## Usage
 
 This version:
 
@@ -17,7 +17,7 @@ It implements the special moves *en passant* and *castling*.
 
 ![Screenshot of my implementation of Chess in terminal](screenshot.png)
 
-# Reflections
+## Reflections
 
 Though I still have design improvements and additional features in mind, there comes a time to 'take the roast out of the oven', that is to say: calling the current version 'done'. With much more to learn on the Odin journey, further work on this project will have to wait for version 2, as time permits.  
 
