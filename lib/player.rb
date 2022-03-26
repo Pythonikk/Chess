@@ -28,11 +28,6 @@ class Player
 
   def king_pos
     pieces.select { |p| p.is_a?(King) }[0].current_pos
-    # king = Pieces.all.select do |piece|
-    #   piece.is_a?(King) &&
-    #     piece.color == color
-    # end
-    # king[0].current_pos
   end
 
   private

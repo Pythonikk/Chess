@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# handles the behavior of a move made by player
+# handles the behavior of a move.
 class Move
   attr_reader :player, :move, :piece, :landing, :opponent, :castling
 
@@ -17,6 +17,8 @@ class Move
     @move = player_input
     @piece = Square.find_by_pos(move[0]).occupied_by
     @landing = Square.find_by_pos(move[1])
+    return unless piece.is_a?(King)
+
     @castling = castling?
   end
 

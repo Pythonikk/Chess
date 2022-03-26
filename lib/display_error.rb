@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# player errors to be printed in terminal
-# to extend Display class
+# extends Display class
 module DisplayError
   def no_piece
     "=> There isn't a piece to move on the selected square."

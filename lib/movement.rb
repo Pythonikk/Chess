@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# defines types of movement that some pieces share/
+# defines types of movement that some pieces share
 # to be included in Piece class.
 module Movement
   private

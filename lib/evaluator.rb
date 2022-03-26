@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# evaluates the move the player is trying to make
+# evaluates the validity of a move.
 class Evaluator
   attr_reader :player, :opponent, :piece, :landing, :castling
 
@@ -13,14 +13,12 @@ class Evaluator
   end
 
   def error
-    return elemental_error unless elemental_error.nil?
-    return castling_error if castling && castling_error
-    return if castling
-    return general_error unless general_error.nil?
-    return check_error unless check_error.nil?
-    return nil unless piece.is_a?(Pawn)
-
-    pawn_error
+    error_types.each do |type|
+      error = send(type)
+      return error if error
+      break if castling && type == :castling_error
+    end
+    nil
   end
 
   def path_clear?(piece = @piece, position = landing.pos)
@@ -33,6 +31,10 @@ class Evaluator
   end
 
   private
+
+  def error_types
+    %i[elemental_error castling_error general_error check_error pawn_error]
+  end
 
   def elemental_error
     return :no_piece unless piece?
@@ -64,6 +66,8 @@ class Evaluator
   end
 
   def castling_error
+    return unless piece.is_a?(King)
+
     castler = Castler.new(piece, player, opponent, landing)
     return unless castler.attempt?
 

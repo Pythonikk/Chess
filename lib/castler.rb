@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# defines the behavior of a castling move between the rook and king
+# defines the behavior of 'castling' move.
 class Castler
-  attr_reader :piece, :player, :opponent, :direction, :rook, :landing
+  attr_reader :piece, :player, :opponent, :landing, :direction, :rook
 
   def initialize(piece, player, opponent, landing)
     @piece = piece
@@ -11,6 +11,11 @@ class Castler
     @landing = landing
     @direction = find_direction
     @rook = find_rook
+  end
+
+  def attempt?
+    piece.is_a?(King) && moving_two_squares? &&
+      rook_in_position?
   end
 
   def rook_square
@@ -25,6 +30,15 @@ class Castler
     pos = (col + rook.current_pos[1]).to_sym
     Square.find_by_pos(pos)
   end
+
+  def jumped_square_under_attack?
+    opponent.pieces.each do |piece|
+      return true if piece.moves.any? { |m| m == square_jumped.pos }
+    end
+    false
+  end
+
+  private
 
   def find_direction
     if Board::COLUMNS.index(piece.current_pos[0]) < Board::COLUMNS.index(landing.pos[0])
@@ -52,29 +66,9 @@ class Castler
     Square.find_by_pos((col + piece.current_pos[1]).to_sym)
   end
 
-  def jumped_square_under_attack?
-    opponent.pieces.each do |piece|
-      return true if piece.moves.any? { |m| m == square_jumped.pos }
-    end
-    false
-  end
-
   def rook_in_position?
     player.pieces.include?(rook) && rook.current_pos == rook.start_pos
   end
-
-  def attempt?
-    piece.is_a?(King) && moving_two_squares? &&
-      rook_in_position?
-  end
-
-  # def valid_castling?
-  #   piece.first_move? && rook.first_move? &&
-  #     evaluator.path_clear?(piece, rook.current_pos) &&
-  #     piece.in_check == false &&
-  #     !@evaluator.puts_in_check? &&
-  #     !jumped_square_under_attack?
-  # end
 
   def moving_two_squares?
     return false unless within_row?
