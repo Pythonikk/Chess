@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pry-byebug'
 require 'yaml'
 require_relative 'game'
 require_relative 'movement'

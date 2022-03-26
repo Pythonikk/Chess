@@ -8,8 +8,6 @@ class Move
     @player = player
     @opponent = opponent
     initiate
-    return if Game.saved
-
     execute
   end
 
@@ -17,8 +15,6 @@ class Move
 
   def set_vars
     @move = player_input
-    return if Game.saved
-
     @piece = Square.find_by_pos(move[0]).occupied_by
     @landing = Square.find_by_pos(move[1])
     @castling = castling?
@@ -26,8 +22,6 @@ class Move
 
   def initiate
     set_vars
-
-    return if Game.saved
     return piece.take_en_passant(opponent, landing) if passant_move?
 
     @evaluator = Evaluator.new(self)
@@ -123,7 +117,7 @@ class Move
   def player_input
     Display.move
     input = gets.chomp.downcase.split(' ').map(&:to_sym)
-    return save_and_exit if input == [:save]
+    save_and_exit if input == [:save]
     return input if valid?(input)
 
     player_input
@@ -137,5 +131,6 @@ class Move
   def save_and_exit
     Game.save
     Game.saved = true
+    exit(true)
   end
 end

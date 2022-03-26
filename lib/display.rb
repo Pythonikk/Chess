@@ -11,9 +11,14 @@ class Display
     puts 'Select game: [0]New Game  [1]Load Game'
   end
 
+  def self.invalid_selection
+    puts 'Invalid selection'
+    Display.select_game
+  end
+
   def self.instructions
-    puts 'When prompted to move, enter the square you wish to move from'\
-    " and the square you wish to move to. Like so: f2 f4\n Enter 'save' to save the game.\n"
+    puts 'When prompted to move, enter the squares you wish to move from'\
+    " and to. Ex => Move: f2 f4 \n Enter 'save' to save and exit the game.\n"
   end
 
   def self.move_error(error)
