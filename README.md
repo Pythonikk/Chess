@@ -6,16 +6,26 @@ A command line Chess game where two players can play against each other. This wa
 
 This version:
 
---uses the [colorize](https://github.com/fazibear/colorize) gem to ouput the board in color. The colors I have chosen may not show up properly depending on your terminal color configurations. For testing, I used a dark sandy colored background, as displayed in the screenshot below.
+-- uses the [colorize](https://github.com/fazibear/colorize) gem to ouput the board in color. The colors I have chosen may not show up properly depending on your terminal color configurations. For testing, I used a dark sandy terminal background, as displayed in the screenshot below. 
 
---follows the common rules of Chess. It does not allow a player to make an illegal move such as one that would put their king in check, or neglect to guard a king who is in check. 
+-- follows the common rules of Chess. It does not allow a player to make an illegal move such as one that would put their king in check, or neglect to guard a king who is in check. 
 It implements the special moves *en passant* and *castling*.
 
---does not implement pre-determination of *mate*. When a player is in check and cannot make a move to remove the check, the turn goes to their opponent who must take their king for the game to end.
+-- does not implement pre-determination of *mate*. When a player is in check and cannot make a move to remove the check, the turn goes to their opponent who must take their king for the game to end.
 
---does not call a *stalemate*. If a stalemate is reached, the players must recognize it and quit the game.
+-- does not call a *stalemate*. If a stalemate is reached, the players must recognize it and quit the game.
 
 ![Screenshot of my implementation of Chess in terminal](screenshot.png)
+
+## Roadmap
+
+Version 2 will include:
+
+-- AI computer player
+-- Improved scoresheet and point system. The game will keep score within a single game based on piece point values, and allow score tracking across multiple games. 
+-- Mate and Stalemate implementation. The game will declare a win/loss/draw.
+
+Version 3 will be web based. 
 
 ## Reflections
 
