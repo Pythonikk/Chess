@@ -1,0 +1,701 @@
+---
+- !ruby/object:Square
+  pos: :a8
+  color: :white
+  occupied_by: !ruby/object:Rook
+    color: :black
+    start_pos: :a8
+    current_pos: :a8
+    cp1: a
+    cp2: 8
+    squares:
+    - - :a7
+      - :a6
+      - :a5
+      - :a4
+      - :a3
+      - :a2
+      - :a1
+    - - :b8
+      - :c8
+      - :d8
+      - :e8
+      - :f8
+      - :g8
+      - :h8
+- !ruby/object:Square
+  pos: :b8
+  color: :black
+  occupied_by: !ruby/object:Knight
+    color: :black
+    start_pos: :b8
+    current_pos: :b8
+    cp1: b
+    cp2: 8
+    squares:
+    - - :c10
+    - - :d9
+    - - :d7
+    - - :c6
+    - - :a6
+    - - :h7
+    - - :h9
+    - - :a10
+- !ruby/object:Square
+  pos: :c8
+  color: :white
+  occupied_by: !ruby/object:Bishop
+    color: :black
+    start_pos: :c8
+    current_pos: :c8
+    cp1: c
+    cp2: 8
+    squares:
+    - - :b7
+      - :a6
+    - - :d7
+      - :e6
+      - :f5
+      - :g4
+      - :h3
+- !ruby/object:Square
+  pos: :d8
+  color: :black
+  occupied_by: !ruby/object:Queen
+    color: :black
+    start_pos: :d8
+    current_pos: :d8
+    cp1: d
+    cp2: 8
+    squares:
+    - - :d7
+      - :d6
+      - :d5
+      - :d4
+      - :d3
+      - :d2
+      - :d1
+    - - :c8
+      - :b8
+      - :a8
+    - - :e8
+      - :f8
+      - :g8
+      - :h8
+    - - :c7
+      - :b6
+      - :a5
+    - - :e7
+      - :f6
+      - :g5
+      - :h4
+- !ruby/object:Square
+  pos: :e8
+  color: :white
+  occupied_by: !ruby/object:King
+    color: :black
+    start_pos: :e8
+    current_pos: :e8
+    cp1: e
+    cp2: 8
+    squares:
+    - - :f7
+    - - :e7
+    - - :d7
+    - - :f8
+    - - :e8
+    - - :d8
+    - - :f9
+    - - :e9
+    - - :d9
+- !ruby/object:Square
+  pos: :f8
+  color: :black
+  occupied_by: !ruby/object:Bishop
+    color: :black
+    start_pos: :f8
+    current_pos: :f8
+    cp1: f
+    cp2: 8
+    squares:
+    - - :e7
+      - :d6
+      - :c5
+      - :b4
+      - :a3
+    - - :g7
+      - :h6
+- !ruby/object:Square
+  pos: :g8
+  color: :white
+  occupied_by: !ruby/object:Knight
+    color: :black
+    start_pos: :g8
+    current_pos: :g8
+    cp1: g
+    cp2: 8
+    squares:
+    - - :h10
+    - - :9
+    - - :7
+    - - :h6
+    - - :f6
+    - - :e7
+    - - :e9
+    - - :f10
+- !ruby/object:Square
+  pos: :h8
+  color: :black
+  occupied_by: !ruby/object:Rook
+    color: :black
+    start_pos: :h8
+    current_pos: :h8
+    cp1: h
+    cp2: 8
+    squares:
+    - - :h7
+      - :h6
+      - :h5
+      - :h4
+      - :h3
+      - :h2
+      - :h1
+    - - :g8
+      - :f8
+      - :e8
+      - :d8
+      - :c8
+      - :b8
+      - :a8
+- !ruby/object:Square
+  pos: :a7
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :a7
+    current_pos: :a7
+    cp1: a
+    cp2: 7
+    squares:
+    - - :a6
+    - - :a6
+      - :a5
+    - - :h6
+    - - :b6
+- !ruby/object:Square
+  pos: :b7
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :b7
+    current_pos: :b7
+    cp1: b
+    cp2: 7
+    squares:
+    - - :b6
+    - - :b6
+      - :b5
+    - - :a6
+    - - :c6
+- !ruby/object:Square
+  pos: :c7
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :c7
+    current_pos: :c7
+    cp1: c
+    cp2: 7
+    squares:
+    - - :c6
+    - - :c6
+      - :c5
+    - - :b6
+    - - :d6
+- !ruby/object:Square
+  pos: :d7
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :e7
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :e7
+    current_pos: :e7
+    cp1: e
+    cp2: 7
+    squares:
+    - - :e6
+    - - :e6
+      - :e5
+    - - :d6
+    - - :f6
+- !ruby/object:Square
+  pos: :f7
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :f7
+    current_pos: :f7
+    cp1: f
+    cp2: 7
+    squares:
+    - - :f6
+    - - :f6
+      - :f5
+    - - :e6
+    - - :g6
+- !ruby/object:Square
+  pos: :g7
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :g7
+    current_pos: :g7
+    cp1: g
+    cp2: 7
+    squares:
+    - - :g6
+    - - :g6
+      - :g5
+    - - :f6
+    - - :h6
+- !ruby/object:Square
+  pos: :h7
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :h7
+    current_pos: :h7
+    cp1: h
+    cp2: 7
+    squares:
+    - - :h6
+    - - :h6
+      - :h5
+    - - :g6
+    - - :6
+- !ruby/object:Square
+  pos: :a6
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :b6
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :c6
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :d6
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :e6
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :f6
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :g6
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :h6
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :a5
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :b5
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :c5
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :d5
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :black
+    start_pos: :d7
+    current_pos: :d5
+    cp1: d
+    cp2: 5
+    squares:
+    - - :d4
+    - - :c4
+    - - :e4
+- !ruby/object:Square
+  pos: :e5
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :f5
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :g5
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :h5
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :a4
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :b4
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :c4
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :d4
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :e4
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :e2
+    current_pos: :e4
+    cp1: e
+    cp2: 4
+    squares:
+    - - :e5
+    - - :d5
+    - - :f5
+- !ruby/object:Square
+  pos: :f4
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :g4
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :h4
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :a3
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :b3
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :c3
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :d3
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :e3
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :f3
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :g3
+  color: :black
+  occupied_by: 
+- !ruby/object:Square
+  pos: :h3
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :a2
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :a2
+    current_pos: :a2
+    cp1: a
+    cp2: 2
+    squares:
+    - - :a3
+    - - :a3
+      - :a4
+    - - :h3
+    - - :b3
+- !ruby/object:Square
+  pos: :b2
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :b2
+    current_pos: :b2
+    cp1: b
+    cp2: 2
+    squares:
+    - - :b3
+    - - :b3
+      - :b4
+    - - :a3
+    - - :c3
+- !ruby/object:Square
+  pos: :c2
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :c2
+    current_pos: :c2
+    cp1: c
+    cp2: 2
+    squares:
+    - - :c3
+    - - :c3
+      - :c4
+    - - :b3
+    - - :d3
+- !ruby/object:Square
+  pos: :d2
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :d2
+    current_pos: :d2
+    cp1: d
+    cp2: 2
+    squares:
+    - - :d3
+    - - :d3
+      - :d4
+    - - :c3
+    - - :e3
+- !ruby/object:Square
+  pos: :e2
+  color: :white
+  occupied_by: 
+- !ruby/object:Square
+  pos: :f2
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :f2
+    current_pos: :f2
+    cp1: f
+    cp2: 2
+    squares:
+    - - :f3
+    - - :f3
+      - :f4
+    - - :e3
+    - - :g3
+- !ruby/object:Square
+  pos: :g2
+  color: :white
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :g2
+    current_pos: :g2
+    cp1: g
+    cp2: 2
+    squares:
+    - - :g3
+    - - :g3
+      - :g4
+    - - :f3
+    - - :h3
+- !ruby/object:Square
+  pos: :h2
+  color: :black
+  occupied_by: !ruby/object:Pawn
+    color: :white
+    start_pos: :h2
+    current_pos: :h2
+    cp1: h
+    cp2: 2
+    squares:
+    - - :h3
+    - - :h3
+      - :h4
+    - - :g3
+    - - :3
+- !ruby/object:Square
+  pos: :a1
+  color: :black
+  occupied_by: !ruby/object:Rook
+    color: :white
+    start_pos: :a1
+    current_pos: :a1
+    cp1: a
+    cp2: 1
+    squares:
+    - - :a2
+      - :a3
+      - :a4
+      - :a5
+      - :a6
+      - :a7
+      - :a8
+    - - :b1
+      - :c1
+      - :d1
+      - :e1
+      - :f1
+      - :g1
+      - :h1
+- !ruby/object:Square
+  pos: :b1
+  color: :white
+  occupied_by: !ruby/object:Knight
+    color: :white
+    start_pos: :b1
+    current_pos: :b1
+    cp1: b
+    cp2: 1
+    squares:
+    - - :c3
+    - - :d2
+    - - :d0
+    - - :c-1
+    - - :a-1
+    - - :h0
+    - - :h2
+    - - :a3
+- !ruby/object:Square
+  pos: :c1
+  color: :black
+  occupied_by: !ruby/object:Bishop
+    color: :white
+    start_pos: :c1
+    current_pos: :c1
+    cp1: c
+    cp2: 1
+    squares:
+    - - :b2
+      - :a3
+    - - :d2
+      - :e3
+      - :f4
+      - :g5
+      - :h6
+- !ruby/object:Square
+  pos: :d1
+  color: :white
+  occupied_by: !ruby/object:Queen
+    color: :white
+    start_pos: :d1
+    current_pos: :d1
+    cp1: d
+    cp2: 1
+    squares:
+    - - :d2
+      - :d3
+      - :d4
+      - :d5
+      - :d6
+      - :d7
+      - :d8
+    - - :c1
+      - :b1
+      - :a1
+    - - :e1
+      - :f1
+      - :g1
+      - :h1
+    - - :c2
+      - :b3
+      - :a4
+    - - :e2
+      - :f3
+      - :g4
+      - :h5
+- !ruby/object:Square
+  pos: :e1
+  color: :black
+  occupied_by: !ruby/object:King
+    color: :white
+    start_pos: :e1
+    current_pos: :e1
+    cp1: e
+    cp2: 1
+    squares:
+    - - :f0
+    - - :e0
+    - - :d0
+    - - :f1
+    - - :e1
+    - - :d1
+    - - :f2
+    - - :e2
+    - - :d2
+- !ruby/object:Square
+  pos: :f1
+  color: :white
+  occupied_by: !ruby/object:Bishop
+    color: :white
+    start_pos: :f1
+    current_pos: :f1
+    cp1: f
+    cp2: 1
+    squares:
+    - - :e2
+      - :d3
+      - :c4
+      - :b5
+      - :a6
+    - - :g2
+      - :h3
+- !ruby/object:Square
+  pos: :g1
+  color: :black
+  occupied_by: !ruby/object:Knight
+    color: :white
+    start_pos: :g1
+    current_pos: :g1
+    cp1: g
+    cp2: 1
+    squares:
+    - - :h3
+    - - :2
+    - - :0
+    - - :h-1
+    - - :f-1
+    - - :e0
+    - - :e2
+    - - :f3
+- !ruby/object:Square
+  pos: :h1
+  color: :white
+  occupied_by: !ruby/object:Rook
+    color: :white
+    start_pos: :h1
+    current_pos: :h1
+    cp1: h
+    cp2: 1
+    squares:
+    - - :h2
+      - :h3
+      - :h4
+      - :h5
+      - :h6
+      - :h7
+      - :h8
+    - - :g1
+      - :f1
+      - :e1
+      - :d1
+      - :c1
+      - :b1
+      - :a1

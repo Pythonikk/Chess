@@ -1,0 +1,243 @@
+--- !ruby/object:Player
+color: :white
+pieces:
+- !ruby/object:Rook
+  color: :white
+  start_pos: :a1
+  current_pos: :a1
+  cp1: a
+  cp2: 1
+  squares:
+  - - :a2
+    - :a3
+    - :a4
+    - :a5
+    - :a6
+    - :a7
+    - :a8
+  - - :b1
+    - :c1
+    - :d1
+    - :e1
+    - :f1
+    - :g1
+    - :h1
+- !ruby/object:Rook
+  color: :white
+  start_pos: :h1
+  current_pos: :h1
+  cp1: h
+  cp2: 1
+  squares:
+  - - :h2
+    - :h3
+    - :h4
+    - :h5
+    - :h6
+    - :h7
+    - :h8
+  - - :g1
+    - :f1
+    - :e1
+    - :d1
+    - :c1
+    - :b1
+    - :a1
+- !ruby/object:Knight
+  color: :white
+  start_pos: :b1
+  current_pos: :b1
+  cp1: b
+  cp2: 1
+  squares:
+  - - :c3
+  - - :d2
+  - - :d0
+  - - :c-1
+  - - :a-1
+  - - :h0
+  - - :h2
+  - - :a3
+- !ruby/object:Knight
+  color: :white
+  start_pos: :g1
+  current_pos: :g1
+  cp1: g
+  cp2: 1
+  squares:
+  - - :h3
+  - - :2
+  - - :0
+  - - :h-1
+  - - :f-1
+  - - :e0
+  - - :e2
+  - - :f3
+- !ruby/object:Bishop
+  color: :white
+  start_pos: :c1
+  current_pos: :c1
+  cp1: c
+  cp2: 1
+  squares:
+  - - :b2
+    - :a3
+  - - :d2
+    - :e3
+    - :f4
+    - :g5
+    - :h6
+- !ruby/object:Bishop
+  color: :white
+  start_pos: :f1
+  current_pos: :f1
+  cp1: f
+  cp2: 1
+  squares:
+  - - :e2
+    - :d3
+    - :c4
+    - :b5
+    - :a6
+  - - :g2
+    - :h3
+- !ruby/object:Queen
+  color: :white
+  start_pos: :d1
+  current_pos: :d1
+  cp1: d
+  cp2: 1
+  squares:
+  - - :d2
+    - :d3
+    - :d4
+    - :d5
+    - :d6
+    - :d7
+    - :d8
+  - - :c1
+    - :b1
+    - :a1
+  - - :e1
+    - :f1
+    - :g1
+    - :h1
+  - - :c2
+    - :b3
+    - :a4
+  - - :e2
+    - :f3
+    - :g4
+    - :h5
+- !ruby/object:King
+  color: :white
+  start_pos: :e1
+  current_pos: :e1
+  cp1: e
+  cp2: 1
+  squares:
+  - - :f0
+  - - :e0
+  - - :d0
+  - - :f1
+  - - :e1
+  - - :d1
+  - - :f2
+  - - :e2
+  - - :d2
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :a2
+  current_pos: :a2
+  cp1: a
+  cp2: 2
+  squares:
+  - - :a3
+  - - :a3
+    - :a4
+  - - :h3
+  - - :b3
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :b2
+  current_pos: :b2
+  cp1: b
+  cp2: 2
+  squares:
+  - - :b3
+  - - :b3
+    - :b4
+  - - :a3
+  - - :c3
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :c2
+  current_pos: :c2
+  cp1: c
+  cp2: 2
+  squares:
+  - - :c3
+  - - :c3
+    - :c4
+  - - :b3
+  - - :d3
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :d2
+  current_pos: :d2
+  cp1: d
+  cp2: 2
+  squares:
+  - - :d3
+  - - :d3
+    - :d4
+  - - :c3
+  - - :e3
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :e2
+  current_pos: :e4
+  cp1: e
+  cp2: 4
+  squares:
+  - - :e5
+  - - :d5
+  - - :f5
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :f2
+  current_pos: :f2
+  cp1: f
+  cp2: 2
+  squares:
+  - - :f3
+  - - :f3
+    - :f4
+  - - :e3
+  - - :g3
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :g2
+  current_pos: :g2
+  cp1: g
+  cp2: 2
+  squares:
+  - - :g3
+  - - :g3
+    - :g4
+  - - :f3
+  - - :h3
+- !ruby/object:Pawn
+  color: :white
+  start_pos: :h2
+  current_pos: :h2
+  cp1: h
+  cp2: 2
+  squares:
+  - - :h3
+  - - :h3
+    - :h4
+  - - :g3
+  - - :3
+graveyard: []
+in_check: false
