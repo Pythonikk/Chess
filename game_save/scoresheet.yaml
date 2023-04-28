@@ -1,0 +1,25 @@
+---
+- :piece: !ruby/object:Pawn
+    color: :white
+    start_pos: :e2
+    current_pos: :e4
+    cp1: e
+    cp2: 4
+    squares:
+    - - :e5
+    - - :d5
+    - - :f5
+  :from: :e2
+  :to: :e4
+- :piece: !ruby/object:Pawn
+    color: :black
+    start_pos: :d7
+    current_pos: :d5
+    cp1: d
+    cp2: 5
+    squares:
+    - - :d4
+    - - :c4
+    - - :e4
+  :from: :d7
+  :to: :d5
