@@ -6,7 +6,7 @@ This was my final project for [The Odin Project's](https://www.theodinproject.co
 
 
 
-#### Accessing the Project
+### Accessing the Project
 
 This project can be accessed here: [chess replit](https://replit.com/@technikka/Chess). Click 'Run' or the play button to begin.
 
